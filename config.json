@@ -1,0 +1,13 @@
+{
+  "teams": 4,
+  "teamNames": ["Czerwoni", "Niebiescy", "Żółci", "Zieloni"],
+  "teamColors": ["#e53e3e", "#3182ce", "#d69e2e", "#38a169"],
+  "startingCredits": 1000,
+  "startingTokens": 3,
+  "tokensBetweenRounds": 1,
+  "rounds": 3,
+  "questionsPerRound": 5,
+  "basePools": [100, 200, 300],
+  "questionsFile": "./data/questions.csv",
+  "manualRoundPools": false
+}

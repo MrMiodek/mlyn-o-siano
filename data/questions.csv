@@ -1,0 +1,28 @@
+Kategoria,Podkategoria,Pytanie,Typ_pytania,Margines,Podpucha1,Podpucha2,Podpucha3,Akceptowana_Odpowiedź
+Nauka,Fizyka,Ile wynosi prędkość światła w próżni w km/s (zaokrąglij do tysięcy)?,Liczba,5000,,,,300000
+Nauka,Biologia,Który organ produkuje insulinę?,ABCD,,Wątroba,Nerka,Serce,Trzustka
+Nauka,Chemia,Jaki jest symbol chemiczny złota?,ABCD,,Ag,Gd,Go,Au
+Geografia,Stolice,Jakie jest miasto stołeczne Australii?,ABCD,,Sydney,Melbourne,Brisbane,Canberra
+Geografia,Rzeki,Która rzeka jest najdłuższa na świecie?,ABCD,,Amazonka,Jangcy,Missisipi,Nil
+Geografia,Szczyty,Ile metrów wynosi wysokość Mount Everest (z dokładnością do podanego marginesu)?,Liczba,50,,,,8849
+Film,Nagrody,W którym roku odbyła się pierwsza ceremonia wręczenia Oscarów?,Liczba,3,,,,1929
+Film,Reżyseria,Kto wyreżyserował film Ojciec Chrzestny?,ABCD,,Martin Scorsese,Steven Spielberg,Quentin Tarantino,Francis Ford Coppola
+Film,Aktorzy,Który aktor zagrał Jokera w filmie z 2019 roku?,ABCD,,Robert De Niro,Jared Leto,Heath Ledger,Joaquin Phoenix
+Muzyka,Gatunki,Który gatunek muzyczny pochodzi z Jamajki?,ABCD,,Salsa,Bossa Nova,Tango,Reggae
+Muzyka,Zespoły,W którym roku The Beatles oficjalnie się rozwiązali?,Liczba,2,,,,1970
+Muzyka,Rekordy,Ile albumów sprzedała w swojej karierze Celine Dion (szacunkowo w milionach)?,Liczba,50,,,,200
+Sport,Piłka nożna,Ile razy Brazylia zdobyła Mistrzostwo Świata w piłce nożnej?,Liczba,1,,,,5
+Sport,Tenis,Który tenisista zdobył najwięcej tytułów Wielkiego Szlema w historii?,ABCD,,Roger Federer,Rafael Nadal,Pete Sampras,Novak Djokovic
+Sport,Olimpiada,W którym mieście odbyły się Letnie Igrzyska Olimpijskie w 2000 roku?,ABCD,,Atlanta,Ateny,Barcelona,Sydney
+Polska,Historia,W którym roku Polska odzyskała niepodległość po I wojnie światowej?,Liczba,0,,,,1918
+Polska,Kultura,"Kto napisał ""Pana Tadeusza""?",ABCD,,Juliusz Słowacki,Zygmunt Krasiński,Cyprian Kamil Norwid,Adam Mickiewicz
+Polska,Przyroda,Ile metrów wynosi wysokość Rysów - najwyższego szczytu Polski?,Liczba,10,,,,2499
+Technika,Internet,W którym roku powstał serwis YouTube?,Liczba,2,,,,2005
+Technika,Komputery,Kto jest współzałożycielem firmy Apple?,ABCD,,Bill Gates,Elon Musk,Mark Zuckerberg,Steve Jobs
+Technika,Telefony,Który kraj produkuje najwięcej smartfonów na świecie?,ABCD,,USA,Korea Południowa,Japonia,Chiny
+Jedzenie,Kuchnia polska,Które danie NIE jest tradycyjnie polskie?,ABCD,,Bigos,Pierogi,Żurek,Ramen
+Jedzenie,Desery,Z czego robi się tradycyjne tiramisu?,ABCD,,Ser ricotta,Ser gouda,Ser feta,Mascarpone
+Jedzenie,Owoce,Ile kalorii ma przeciętnie 100g awokado?,Liczba,30,,,,160
+Kultura,Literatura,Ile tomów liczy Saga o Wiedźminie Andrzeja Sapkowskiego?,Liczba,1,,,,8
+Kultura,Sztuka,Kto namalował Monę Lisę?,ABCD,,Michał Anioł,Rafael Santi,Sandro Botticelli,Leonardo da Vinci
+Kultura,Teatr,W którym roku urodził się William Szekspir?,Liczba,5,,,,1564
