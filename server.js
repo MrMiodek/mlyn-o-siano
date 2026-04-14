@@ -117,13 +117,12 @@ app.post('/api/init', (req, res) => {
     currentSubcategory: null,
     currentQuestion: null,
     currentPool: 0,
-    basePool: config.basePools[0],
     teams,
     activeTeamId: null,
     bids: {}, // teamId -> amount
     categoryPool: [...allCategories],
     usedCategories: [],
-    questionResult: null, // { type: 'correct'|'passed', teamId, pool, double }
+    questionResult: null, // { type: 'correct'|'passed', teamId, pool, longshot }
     usedQuestionKeys: [], // "Category|Subcategory" used
     abcdRevealed: false,
     abcdWrongOptions: [],
@@ -176,8 +175,14 @@ app.post('/api/confirm-draw', (req, res) => {
 
   state.phase = 'bid';
   state.bids = {};
-  state.currentPool = (state.currentPool || 0) + config.basePools[state.round - 1];
-  state.basePool = config.basePools[state.round - 1];
+  const taxRate = config.baseTax[state.round - 1] / 100;
+  let taxCollected = 0;
+  state.teams.forEach(team => {
+    const tax = Math.floor(team.credits * taxRate);
+    team.credits -= tax;
+    taxCollected += tax;
+  });
+  state.currentPool = (state.currentPool || 0) + taxCollected;
 
   // Remove from category pool
   state.categoryPool = state.categoryPool.filter(c => c !== state.currentCategory);
@@ -297,17 +302,16 @@ app.post('/api/correct-answer', (req, res) => {
   const state = loadState();
   pushHistory(state);
 
-  const { double } = req.body;
+  const { longshot } = req.body;
   const pool = state.currentPool;
-  const earned = double ? pool * 2 : pool;
 
   state.phase = 'summary';
   state.questionResult = {
     type: 'correct',
     teamId: state.activeTeamId,
     pool,
-    double: !!double,
-    earned,
+    longshot: !!longshot,
+    earned: pool,
   };
 
   saveState(state);
@@ -396,7 +400,10 @@ app.post('/api/confirm-summary', (req, res) => {
   // Apply result
   if (state.questionResult && state.questionResult.type === 'correct') {
     const team = state.teams.find(t => t.id === state.questionResult.teamId);
-    if (team) team.credits += state.questionResult.earned;
+    if (team) {
+      team.credits += state.questionResult.earned;
+      if (state.questionResult.longshot) team.tokens += 1;
+    }
   }
   // Pool stays if passed (goes to next round pool? No - per spec it stays for now, just show "w puli pozostaje")
   // Actually per spec: pool is reset after correct answer. If passed it stays (goes nowhere in this question).

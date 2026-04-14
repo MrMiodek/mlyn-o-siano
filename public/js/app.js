@@ -129,14 +129,22 @@ function renderBidPhase(state) {
     row.dataset.teamId = team.id;
     row.innerHTML = `
       <div class="bid-team-name" style="color:${team.color}">${team.name}</div>
-      <button class="btn-vabank" onclick="vaBankTeam(${team.id}, ${team.credits})">Va Bank</button>
+      <button class="btn-bid-step" onclick="stepBid(${team.id}, -${state.config.bidStep}, ${team.credits})">−${state.config.bidStep}</button>
       <input class="bid-input" id="bid-input-${team.id}" type="number" min="0" max="${team.credits}"
         placeholder="0" oninput="onBidInput(${team.id})" />
+      <button class="btn-bid-step" onclick="stepBid(${team.id}, ${state.config.bidStep}, ${team.credits})">+${state.config.bidStep}</button>
+      <button class="btn-vabank" onclick="vaBankTeam(${team.id}, ${team.credits})">Va Bank</button>
       <div class="bid-credits">💰 ${team.credits}</div>
     `;
     rows.appendChild(row);
   }
   checkBidsReady();
+}
+
+function stepBid(teamId, delta, maxCredits) {
+  const inp = document.getElementById('bid-input-' + teamId);
+  inp.value = Math.max(0, Math.min(maxCredits, (parseInt(inp.value) || 0) + delta));
+  onBidInput(teamId);
 }
 
 function vaBankTeam(teamId, credits) {
@@ -192,7 +200,13 @@ async function selectSubcategory(sub) {
   if (!G) return;
   renderSidebar(G);
   renderQuestionPhase(G);
+  updateChangeSubBtn();
   showScreen('question');
+}
+
+async function updateChangeSubBtn() {
+  const subs = await api('GET', '/api/subcategories');
+  document.getElementById('btn-change-sub').disabled = !subs || subs.length === 0;
 }
 
 /* ===== QUESTION PHASE ===== */
@@ -208,7 +222,7 @@ function renderQuestionPhase(state) {
   abcdEl.innerHTML = '';
 
   if (q.Typ_pytania === 'ABCD') {
-    hintBtn.textContent = '🅰️ ABCD (−1🎫,🪙×1)';
+    hintBtn.innerHTML = '🅰️ ABCD <span class="btn-sub">(−1🎫)</span>';
     hintBtn.classList.remove('hidden');
     hintBtn.disabled = state.abcdRevealed;
 
@@ -230,23 +244,23 @@ function renderQuestionPhase(state) {
         }
         abcdEl.appendChild(btn);
       }
-      correctBtn.textContent = '✓ Poprawna odpowiedź (🪙×1)';
+      correctBtn.textContent = '✓ Poprawna odpowiedź';
       correctBtn.onclick = () => correctAnswer(false);
     } else {
-      correctBtn.textContent = '✓ Poprawna odpowiedź (🪙×2)';
+      correctBtn.innerHTML = '✓ Poprawna odpowiedź <span class="btn-sub">(+1🎫)</span>';
       correctBtn.onclick = () => correctAnswer(true);
     }
   } else {
     // Liczba
-    hintBtn.textContent = state.marginUsed ? 'Margines+ (użyty)' : '📏 Margines+ (−1🎫,🪙×1)';
+    hintBtn.innerHTML = state.marginUsed ? 'Margines+ <span class="btn-sub">(użyty)</span>' : '📏 Margines+ <span class="btn-sub">(−1🎫)</span>';
     hintBtn.disabled = state.marginUsed;
     hintBtn.classList.remove('hidden');
 
     if (state.marginUsed) {
-      correctBtn.textContent = '✓ Poprawna odpowiedź (🪙×1)';
+      correctBtn.textContent = '✓ Poprawna odpowiedź';
       correctBtn.onclick = () => correctAnswer(false);
     } else {
-      correctBtn.textContent = '✓ Poprawna odpowiedź (🪙×2)';
+      correctBtn.innerHTML = '✓ Poprawna odpowiedź <span class="btn-sub">(+1🎫)</span>';
       correctBtn.onclick = () => correctAnswer(true);
     }
   }
@@ -279,6 +293,7 @@ async function useHint() {
   if (!G) return;
   renderSidebar(G);
   renderQuestionPhase(G);
+  updateChangeSubBtn();
 }
 
 async function changeSub() {
@@ -294,8 +309,8 @@ async function changeSub() {
   showScreen('subcategory');
 }
 
-async function correctAnswer(double = true) {
-  G = await api('POST', '/api/correct-answer', { double });
+async function correctAnswer(longshot = true) {
+  G = await api('POST', '/api/correct-answer', { longshot });
   if (!G) return;
   renderSidebar(G);
   renderSummary(G);
@@ -311,6 +326,7 @@ async function wrongAnswer() {
     showScreen('summary');
   } else {
     renderQuestionPhase(G);
+    updateChangeSubBtn();
   }
 }
 
@@ -350,7 +366,7 @@ function renderSummary(state) {
     el.innerHTML = `
       <span class="highlight">${team ? team.name : '?'}</span><br>
       zdobywa<br>
-      <span class="pool-val">${r.pool}${r.double ? ' × 2 = ' + r.earned : ''}</span><br>
+      <span class="pool-val">${r.pool}</span>${r.longshot ? ' +1🎫' : ''}<br>
       kredytów!
     `;
   } else {
@@ -433,6 +449,7 @@ function applyPhase(state) {
       break;
     case 'question':
       renderQuestionPhase(state);
+      updateChangeSubBtn();
       showScreen('question');
       break;
     case 'summary':

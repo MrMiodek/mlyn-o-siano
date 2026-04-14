@@ -7,7 +7,8 @@
   "tokensBetweenRounds": 1,
   "rounds": 3,
   "questionsPerRound": 5,
-  "basePools": [100, 200, 300],
+  "baseTax": [5, 10, 15],
+  "bidStep": 100,
   "questionsFile": "./data/questions.csv",
   "manualRoundPools": false
 }
