@@ -75,13 +75,12 @@
     <div id="screen-draw" class="screen">
       <div id="draw-container">
         <div id="wheel-area">
-          <div id="category-spinner">
-            <div id="spinner-text">?</div>
-          </div>
-          <div id="spinner-arrow">▼</div>
+          <div id="wheel-pointer">▼</div>
+          <canvas id="wheel-canvas" width="420" height="420"></canvas>
         </div>
+        <div id="wheel-result" class="hidden"></div>
         <div id="draw-actions">
-          <button id="btn-draw" class="btn-giant" onclick="drawCategory()">🎡 Losuj kategorię</button>
+          <button id="btn-draw" class="btn-giant" onclick="drawCategory()">🎡 Zakręć</button>
           <button id="btn-confirm-draw" class="btn-giant btn-green hidden" onclick="confirmDraw()">Licytacja →</button>
         </div>
       </div>

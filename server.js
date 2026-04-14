@@ -151,12 +151,13 @@ app.post('/api/draw', (req, res) => {
   const state = loadState();
   pushHistory(state);
 
-  let pool = state.categoryPool;
-  if (pool.length === 0) {
+  if (state.categoryPool.length === 0) {
     // replenish from used
-    pool = [...state.usedCategories];
+    state.categoryPool = [...state.usedCategories];
     state.usedCategories = [];
   }
+
+  const pool = state.categoryPool;
 
   // Pick random
   const idx = Math.floor(Math.random() * pool.length);

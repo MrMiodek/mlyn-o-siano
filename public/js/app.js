@@ -2,6 +2,16 @@
 let G = null; // game state
 let modalTeamId = null;
 
+/* ===== WHEEL STATE ===== */
+const WHEEL_COLORS = [
+  '#c0392b', '#2980b9', '#27ae60', '#f39c12', '#8e44ad',
+  '#16a085', '#d35400', '#e74c3c', '#3498db', '#2ecc71',
+  '#e67e22', '#9b59b6', '#1abc9c', '#34495e', '#d4ac0d',
+];
+let wheelAngle = 0;
+let wheelAnimId = null;
+let wheelCategories = [];
+
 /* ===== API HELPERS ===== */
 async function api(method, path, body) {
   const r = await fetch(path, {
@@ -62,6 +72,8 @@ async function initGame() {
   G = await api('POST', '/api/init');
   if (!G) return;
   renderSidebar(G);
+  wheelAngle = 0;
+  initWheelDisplay();
   showScreen('draw');
 }
 
@@ -75,39 +87,168 @@ async function undo() {
   applyPhase(G);
 }
 
+/* ===== FORTUNE WHEEL ===== */
+function getWheelCategories() {
+  if (!G) return [];
+  if (G.categoryPool && G.categoryPool.length > 0) return G.categoryPool;
+  if (G.usedCategories && G.usedCategories.length > 0) return G.usedCategories;
+  return [];
+}
+
+function drawWheel(categories, rotation) {
+  const canvas = document.getElementById('wheel-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const size = canvas.width;
+  const cx = size / 2;
+  const cy = size / 2;
+  const radius = cx - 8;
+  const n = categories.length;
+
+  ctx.clearRect(0, 0, size, size);
+  if (n === 0) return;
+
+  const sliceAngle = (2 * Math.PI) / n;
+
+  // Outer ring glow
+  ctx.beginPath();
+  ctx.arc(cx, cy, radius + 3, 0, 2 * Math.PI);
+  ctx.strokeStyle = 'rgba(245, 200, 66, 0.25)';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  for (let i = 0; i < n; i++) {
+    const startA = rotation + i * sliceAngle;
+    const endA = startA + sliceAngle;
+
+    // Slice
+    ctx.beginPath();
+    ctx.moveTo(cx, cy);
+    ctx.arc(cx, cy, radius, startA, endA);
+    ctx.closePath();
+    ctx.fillStyle = WHEEL_COLORS[i % WHEEL_COLORS.length];
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.35)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+
+    // Text along the slice
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.rotate(startA + sliceAngle / 2);
+    ctx.textAlign = 'right';
+    ctx.fillStyle = '#fff';
+    ctx.shadowColor = 'rgba(0,0,0,0.8)';
+    ctx.shadowBlur = 4;
+
+    const fontSize = n > 12 ? 12 : n > 8 ? 14 : n > 5 ? 16 : 19;
+    ctx.font = `bold ${fontSize}px "Barlow Condensed", sans-serif`;
+
+    const maxWidth = radius - 40;
+    let text = categories[i];
+    while (ctx.measureText(text).width > maxWidth && text.length > 3) {
+      text = text.slice(0, -1);
+    }
+    if (text !== categories[i]) text += '…';
+    ctx.fillText(text, radius - 14, fontSize / 3);
+
+    ctx.shadowBlur = 0;
+    ctx.restore();
+  }
+
+  // Center hub
+  ctx.beginPath();
+  ctx.arc(cx, cy, 22, 0, 2 * Math.PI);
+  ctx.fillStyle = '#1e1e2e';
+  ctx.fill();
+  ctx.strokeStyle = '#f5c842';
+  ctx.lineWidth = 3;
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.arc(cx, cy, 6, 0, 2 * Math.PI);
+  ctx.fillStyle = '#f5c842';
+  ctx.fill();
+}
+
+function initWheelDisplay() {
+  wheelCategories = getWheelCategories();
+  drawWheel(wheelCategories, wheelAngle);
+}
+
+function spinToCategory(targetCategory, pool) {
+  wheelCategories = pool;
+  const n = pool.length;
+  const sliceAngle = (2 * Math.PI) / n;
+  const targetIndex = pool.indexOf(targetCategory);
+  if (targetIndex === -1) return;
+
+  // Pointer is at -PI/2 (top of canvas).
+  // For the center of segment targetIndex to align with the pointer:
+  const baseTarget = -Math.PI / 2 - targetIndex * sliceAngle - sliceAngle / 2;
+
+  // Random offset within 60% of the slice so it doesn't always hit dead center
+  const jitter = (Math.random() - 0.5) * sliceAngle * 0.6;
+  let finalAngle = baseTarget + jitter;
+
+  // Ensure the wheel spins forward (clockwise) with 4-6 extra full rotations
+  const extraRotations = (4 + Math.floor(Math.random() * 3)) * 2 * Math.PI;
+  while (finalAngle < wheelAngle + 2 * Math.PI) finalAngle += 2 * Math.PI;
+  finalAngle += extraRotations;
+
+  const startAngle = wheelAngle;
+  const totalDelta = finalAngle - startAngle;
+  const duration = 4000 + Math.random() * 1500;
+  const startTime = performance.now();
+
+  if (wheelAnimId) cancelAnimationFrame(wheelAnimId);
+
+  function animate(now) {
+    const elapsed = now - startTime;
+    const t = Math.min(elapsed / duration, 1);
+    // Cubic ease-out for natural deceleration
+    const eased = 1 - Math.pow(1 - t, 3);
+
+    wheelAngle = startAngle + totalDelta * eased;
+    drawWheel(pool, wheelAngle);
+
+    if (t < 1) {
+      wheelAnimId = requestAnimationFrame(animate);
+    } else {
+      wheelAngle = finalAngle;
+      drawWheel(pool, wheelAngle);
+      wheelAnimId = null;
+      onWheelStopped(targetCategory);
+    }
+  }
+
+  wheelAnimId = requestAnimationFrame(animate);
+}
+
+function onWheelStopped(category) {
+  document.getElementById('btn-draw').disabled = false;
+  document.getElementById('btn-confirm-draw').classList.remove('hidden');
+  const resultEl = document.getElementById('wheel-result');
+  resultEl.textContent = category;
+  resultEl.classList.remove('hidden');
+  G.currentCategory = category;
+}
+
 /* ===== DRAW PHASE ===== */
 async function drawCategory() {
-  const resp = await api('POST', '/api/draw');
-  if (!resp) return;
-
-  const { category, pool } = resp;
-  const spinner = document.getElementById('spinner-text');
   const btnDraw = document.getElementById('btn-draw');
   const btnConfirm = document.getElementById('btn-confirm-draw');
+  const resultEl = document.getElementById('wheel-result');
 
   btnDraw.disabled = true;
   btnConfirm.classList.add('hidden');
-  spinner.classList.add('spinning');
+  resultEl.classList.add('hidden');
 
-  // Animate through categories
-  let count = 0;
-  const maxFrames = 20 + Math.floor(Math.random() * 10);
-  const allCats = pool.length > 1 ? pool : [category];
+  const resp = await api('POST', '/api/draw');
+  if (!resp) { btnDraw.disabled = false; return; }
 
-  const interval = setInterval(() => {
-    const display = allCats[count % allCats.length];
-    spinner.textContent = display;
-    count++;
-    if (count >= maxFrames) {
-      clearInterval(interval);
-      spinner.textContent = category;
-      spinner.classList.remove('spinning');
-      btnConfirm.classList.remove('hidden');
-      btnDraw.disabled = false;
-      // Save to state (not a full state, just local)
-      G.currentCategory = category;
-    }
-  }, 120);
+  const { category, pool } = resp;
+  spinToCategory(category, pool);
 }
 
 async function confirmDraw() {
@@ -383,8 +524,9 @@ async function confirmSummary() {
     showScreen('gameover');
   } else {
     // Reset draw screen
-    document.getElementById('spinner-text').textContent = '?';
     document.getElementById('btn-confirm-draw').classList.add('hidden');
+    document.getElementById('wheel-result').classList.add('hidden');
+    initWheelDisplay();
     showScreen('draw');
   }
 }
@@ -436,8 +578,9 @@ async function saveModal() {
 function applyPhase(state) {
   switch (state.phase) {
     case 'draw':
-      document.getElementById('spinner-text').textContent = '?';
       document.getElementById('btn-confirm-draw').classList.add('hidden');
+      document.getElementById('wheel-result').classList.add('hidden');
+      initWheelDisplay();
       showScreen('draw');
       break;
     case 'bid':
