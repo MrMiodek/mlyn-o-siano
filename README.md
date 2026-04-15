@@ -16,17 +16,17 @@ Następnie otwórz w przeglądarce: **http://localhost:8080**
 
 Edytuj plik `config.json`:
 
-| Pole | Opis |
-|------|------|
-| `teams` | Liczba drużyn (3 lub 4) |
-| `teamNames` | Nazwy drużyn |
-| `teamColors` | Kolory drużyn (hex) |
-| `startingCredits` | Startowe kredyty |
-| `startingTokens` | Startowe tokeny |
-| `tokensBetweenRounds` | Tokeny dodawane między rundami |
-| `rounds` | Liczba rund |
-| `questionsPerRound` | Pytań na rundę |
-| `basePools` | Bazowa pula dla każdej rundy [R1, R2, R3] |
+| Pole                  | Opis                                      |
+| --------------------- | ----------------------------------------- |
+| `teams`               | Liczba drużyn (3 lub 4)                   |
+| `teamNames`           | Nazwy drużyn                              |
+| `teamColors`          | Kolory drużyn (hex)                       |
+| `startingCredits`     | Startowe kredyty                          |
+| `startingTokens`      | Startowe tokeny                           |
+| `tokensBetweenRounds` | Tokeny dodawane między rundami            |
+| `rounds`              | Liczba rund                               |
+| `questionsPerRound`   | Pytań na rundę                            |
+| `basePools`           | Bazowa pula dla każdej rundy [R1, R2, R3] |
 
 ## Pytania
 

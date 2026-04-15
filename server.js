@@ -178,7 +178,7 @@ app.post('/api/confirm-draw', (req, res) => {
   state.bids = {};
   const taxRate = config.baseTax[state.round - 1] / 100;
   let taxCollected = 0;
-  state.teams.forEach(team => {
+  state.teams.forEach((team) => {
     const tax = Math.floor(team.credits * taxRate);
     team.credits -= tax;
     taxCollected += tax;
@@ -186,7 +186,7 @@ app.post('/api/confirm-draw', (req, res) => {
   state.currentPool = (state.currentPool || 0) + taxCollected;
 
   // Remove from category pool
-  state.categoryPool = state.categoryPool.filter(c => c !== state.currentCategory);
+  state.categoryPool = state.categoryPool.filter((c) => c !== state.currentCategory);
 
   saveState(state);
   res.json(state);
@@ -202,7 +202,7 @@ app.post('/api/submit-bids', (req, res) => {
 
   // Subtract bids from teams
   for (const [teamId, amount] of Object.entries(bids)) {
-    const team = state.teams.find(t => t.id === parseInt(teamId));
+    const team = state.teams.find((t) => t.id === parseInt(teamId));
     if (team) {
       team.credits -= parseInt(amount);
       state.currentPool += parseInt(amount);
@@ -221,7 +221,7 @@ app.post('/api/submit-bids', (req, res) => {
   state.activeTeamId = sorted[0].id;
 
   // Build bid order for passing
-  state.bidOrder = sorted.map(t => t.id);
+  state.bidOrder = sorted.map((t) => t.id);
   state.bidOrderIndex = 0;
 
   state.phase = 'subcategory';
@@ -237,7 +237,7 @@ app.post('/api/select-subcategory', (req, res) => {
   const { subcategory } = req.body;
   const questions = loadQuestions();
 
-  const q = questions.find(q => q.Kategoria === state.currentCategory && q.Podkategoria === subcategory);
+  const q = questions.find((q) => q.Kategoria === state.currentCategory && q.Podkategoria === subcategory);
   state.currentSubcategory = subcategory;
   state.currentQuestion = q;
   state.phase = 'question';
@@ -258,7 +258,7 @@ app.post('/api/change-subcategory', (req, res) => {
   const state = loadState();
   pushHistory(state);
 
-  const team = state.teams.find(t => t.id === state.activeTeamId);
+  const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
 
   state.currentSubcategory = null;
@@ -277,7 +277,7 @@ app.post('/api/reveal-abcd', (req, res) => {
   const state = loadState();
   pushHistory(state);
 
-  const team = state.teams.find(t => t.id === state.activeTeamId);
+  const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
   state.abcdRevealed = true;
 
@@ -290,7 +290,7 @@ app.post('/api/use-margin', (req, res) => {
   const state = loadState();
   pushHistory(state);
 
-  const team = state.teams.find(t => t.id === state.activeTeamId);
+  const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
   state.marginUsed = true;
 
@@ -346,7 +346,7 @@ app.post('/api/pass-question', (req, res) => {
   pushHistory(state);
 
   // Give current active team a token
-  const team = state.teams.find(t => t.id === state.activeTeamId);
+  const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team) team.tokens += 1;
 
   // Next team in bid order
@@ -376,7 +376,7 @@ app.post('/api/wrong-abcd', (req, res) => {
   state.abcdWrongOptions.push(option);
 
   // Give token, next team
-  const team = state.teams.find(t => t.id === state.activeTeamId);
+  const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team) team.tokens += 1;
 
   state.bidOrderIndex = (state.bidOrderIndex || 0) + 1;
@@ -400,7 +400,7 @@ app.post('/api/confirm-summary', (req, res) => {
 
   // Apply result
   if (state.questionResult && state.questionResult.type === 'correct') {
-    const team = state.teams.find(t => t.id === state.questionResult.teamId);
+    const team = state.teams.find((t) => t.id === state.questionResult.teamId);
     if (team) {
       team.credits += state.questionResult.earned;
       if (state.questionResult.longshot) team.tokens += 1;
@@ -467,7 +467,7 @@ app.post('/api/update-team', (req, res) => {
   pushHistory(state);
 
   const { teamId, credits, tokens } = req.body;
-  const team = state.teams.find(t => t.id === teamId);
+  const team = state.teams.find((t) => t.id === teamId);
   if (!team) return res.status(404).json({ error: 'Team not found' });
 
   if (credits !== undefined) team.credits = credits;
@@ -484,9 +484,9 @@ app.get('/api/subcategories', (req, res) => {
   const used = state.usedQuestionKeys || [];
 
   const subs = questions
-    .filter(q => q.Kategoria === state.currentCategory)
-    .filter(q => !used.includes(`${q.Kategoria}|${q.Podkategoria}`))
-    .map(q => q.Podkategoria);
+    .filter((q) => q.Kategoria === state.currentCategory)
+    .filter((q) => !used.includes(`${q.Kategoria}|${q.Podkategoria}`))
+    .map((q) => q.Podkategoria);
 
   res.json([...new Set(subs)]);
 });

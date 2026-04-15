@@ -4,9 +4,21 @@ let modalTeamId = null;
 
 /* ===== WHEEL STATE ===== */
 const WHEEL_COLORS = [
-  '#c0392b', '#2980b9', '#27ae60', '#f39c12', '#8e44ad',
-  '#16a085', '#d35400', '#e74c3c', '#3498db', '#2ecc71',
-  '#e67e22', '#9b59b6', '#1abc9c', '#34495e', '#d4ac0d',
+  '#c0392b',
+  '#2980b9',
+  '#27ae60',
+  '#f39c12',
+  '#8e44ad',
+  '#16a085',
+  '#d35400',
+  '#e74c3c',
+  '#3498db',
+  '#2ecc71',
+  '#e67e22',
+  '#9b59b6',
+  '#1abc9c',
+  '#34495e',
+  '#d4ac0d',
 ];
 let wheelAngle = 0;
 let wheelAnimId = null;
@@ -20,13 +32,16 @@ async function api(method, path, body) {
     body: body ? JSON.stringify(body) : undefined,
   });
   const data = await r.json();
-  if (!r.ok) { alert(data.error || 'Błąd serwera'); return null; }
+  if (!r.ok) {
+    alert(data.error || 'Błąd serwera');
+    return null;
+  }
   return data;
 }
 
 /* ===== SCREEN MANAGEMENT ===== */
 function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach((s) => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
 }
 
@@ -45,7 +60,7 @@ function renderSidebar(state) {
 
   const list = document.getElementById('teams-list');
   list.innerHTML = '';
-  for (const team of (state.teams || [])) {
+  for (const team of state.teams || []) {
     const isActive = team.id === state.activeTeamId;
     const bid = state.bids && state.bids[team.id] !== undefined ? state.bids[team.id] : null;
     const card = document.createElement('div');
@@ -245,7 +260,10 @@ async function drawCategory() {
   resultEl.classList.add('hidden');
 
   const resp = await api('POST', '/api/draw');
-  if (!resp) { btnDraw.disabled = false; return; }
+  if (!resp) {
+    btnDraw.disabled = false;
+    return;
+  }
 
   const { category, pool } = resp;
   spinToCategory(category, pool);
@@ -302,7 +320,7 @@ function onBidInput(teamId) {
 
 function checkBidsReady() {
   const btn = document.getElementById('btn-confirm-bids');
-  const allFilled = G.teams.every(t => {
+  const allFilled = G.teams.every((t) => {
     const inp = document.getElementById('bid-input-' + t.id);
     return inp && inp.value !== '';
   });
@@ -393,7 +411,9 @@ function renderQuestionPhase(state) {
     }
   } else {
     // Liczba
-    hintBtn.innerHTML = state.marginUsed ? 'Margines+ <span class="btn-sub">(użyty)</span>' : '📏 Margines+ <span class="btn-sub">(−1🎫)</span>';
+    hintBtn.innerHTML = state.marginUsed
+      ? 'Margines+ <span class="btn-sub">(użyty)</span>'
+      : '📏 Margines+ <span class="btn-sub">(−1🎫)</span>';
     hintBtn.disabled = state.marginUsed;
     hintBtn.classList.remove('hidden');
 
@@ -413,7 +433,7 @@ function buildAbcdOptions(q, wrongOpts) {
     { label: q.Podpucha2, correct: false },
     { label: q.Podpucha3, correct: false },
     { label: q.Akceptowana_Odpowiedź, correct: true },
-  ].filter(o => o.label && o.label.trim());
+  ].filter((o) => o.label && o.label.trim());
 
   // Shuffle
   for (let i = opts.length - 1; i > 0; i--) {
@@ -421,7 +441,7 @@ function buildAbcdOptions(q, wrongOpts) {
     [opts[i], opts[j]] = [opts[j], opts[i]];
   }
 
-  return opts.map(o => ({ ...o, wrong: wrongOpts.includes(o.label) }));
+  return opts.map((o) => ({ ...o, wrong: wrongOpts.includes(o.label) }));
 }
 
 async function useHint() {
@@ -438,7 +458,7 @@ async function useHint() {
 }
 
 async function changeSub() {
-  const active = G.teams.find(t => t.id === G.activeTeamId);
+  const active = G.teams.find((t) => t.id === G.activeTeamId);
   if (active && active.tokens <= 0) {
     alert('Brak tokenów!');
     return;
@@ -500,10 +520,13 @@ function renderSummary(state) {
   const el = document.getElementById('summary-text');
   const r = state.questionResult;
 
-  if (!r) { el.innerHTML = ''; return; }
+  if (!r) {
+    el.innerHTML = '';
+    return;
+  }
 
   if (r.type === 'correct') {
-    const team = state.teams.find(t => t.id === r.teamId);
+    const team = state.teams.find((t) => t.id === r.teamId);
     el.innerHTML = `
       <span class="highlight">${team ? team.name : '?'}</span><br>
       zdobywa<br>
@@ -553,7 +576,7 @@ function renderGameOver(state) {
 /* ===== MODAL ===== */
 function openModal(teamId) {
   modalTeamId = teamId;
-  const team = G.teams.find(t => t.id === teamId);
+  const team = G.teams.find((t) => t.id === teamId);
   document.getElementById('modal-team-name').textContent = team.name;
   document.getElementById('modal-credits').value = team.credits;
   document.getElementById('modal-tokens').value = team.tokens;
