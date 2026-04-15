@@ -36,7 +36,17 @@ async function api(method, path, body) {
     alert(data.error || 'Błąd serwera');
     return null;
   }
+  if (method === 'POST') updateUndoRedoButtons();
   return data;
+}
+
+async function updateUndoRedoButtons() {
+  try {
+    const r = await fetch('/api/history-info');
+    const info = await r.json();
+    document.getElementById('btn-undo').disabled = !info.canUndo;
+    document.getElementById('btn-redo').disabled = !info.canRedo;
+  } catch (_) {}
 }
 
 /* ===== SCREEN MANAGEMENT ===== */
@@ -99,6 +109,15 @@ async function undo() {
   G = prev;
   renderSidebar(G);
   // Restore screen based on phase
+  applyPhase(G);
+}
+
+/* ===== REDO ===== */
+async function redo() {
+  const next = await api('POST', '/api/redo');
+  if (!next) return;
+  G = next;
+  renderSidebar(G);
   applyPhase(G);
 }
 
@@ -639,6 +658,7 @@ window.addEventListener('DOMContentLoaded', async () => {
     G = state;
     renderSidebar(G);
     applyPhase(G);
+    updateUndoRedoButtons();
   } else {
     showScreen('init');
   }

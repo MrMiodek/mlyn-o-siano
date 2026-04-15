@@ -96,9 +96,14 @@ body {
   transition: all 0.2s;
 }
 
-.btn-undo:hover {
+.btn-undo:hover:not(:disabled) {
   border-color: var(--accent);
   color: var(--accent);
+}
+
+.btn-undo:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
 }
 
 /* ===== LAYOUT ===== */

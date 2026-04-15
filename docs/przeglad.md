@@ -2,7 +2,7 @@
 
 ## Czym jest Młyn o Siano
 
-Młyn o Siano to aplikacja webowa do prowadzenia imprezowego teleturnieju na żywo, inspirowanego programem telewizyjnym *Awantura o Kasę*. Prowadzący uruchamia aplikację lokalnie i wyświetla ją na wspólnym ekranie — drużyny rywalizują o kredyty, licytując się i odpowiadając na pytania z różnych kategorii.
+Młyn o Siano to aplikacja webowa do prowadzenia imprezowego teleturnieju na żywo, inspirowanego programem telewizyjnym _Awantura o Kasę_. Prowadzący uruchamia aplikację lokalnie i wyświetla ją na wspólnym ekranie — drużyny rywalizują o kredyty, licytując się i odpowiadając na pytania z różnych kategorii.
 
 Aplikacja nie wymaga dostępu do internetu po uruchomieniu (poza załadowaniem czcionek Google Fonts). Działa jako lokalny serwer HTTP dostępny pod adresem `localhost:8080`.
 
@@ -27,7 +27,7 @@ mlyn-o-siano/
 ├── data/                  dane gry
 │   ├── questions.csv      baza pytań
 │   ├── game_state.json    bieżący stan gry (autogenerowany)
-│   └── game_history.json  historia stanów do cofania (autogenerowany)
+│   └── game_history.json  historia stanów do cofania/przywracania (autogenerowany)
 └── docs/                  dokumentacja
 ```
 

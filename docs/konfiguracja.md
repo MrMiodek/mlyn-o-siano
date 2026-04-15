@@ -4,19 +4,19 @@
 
 Ustawienia gry znajdują się w pliku `config.json` w katalogu głównym projektu. Zmiany wymagają ponownego uruchomienia serwera.
 
-| Pole | Opis | Domyślnie |
-|------|------|-----------|
-| `teams` | Liczba drużyn (3 lub 4) | 4 |
-| `teamNames` | Nazwy drużyn | Czerwoni, Niebiescy, Żółci, Zieloni |
-| `teamColors` | Kolory drużyn (kody hex) | czerwony, niebieski, żółty, zielony |
-| `startingCredits` | Kredyty startowe każdej drużyny | 1000 |
-| `startingTokens` | Tokeny startowe każdej drużyny | 3 |
-| `tokensBetweenRounds` | Tokeny dodawane każdej drużynie między rundami | 1 |
-| `rounds` | Liczba rund w grze | 3 |
-| `questionsPerRound` | Liczba pytań w każdej rundzie | 5 |
-| `baseTax` | Stawki myto (%) dla kolejnych rund | 5, 10, 15 |
-| `bidStep` | Krok przycisków +/- w licytacji | 100 |
-| `questionsFile` | Ścieżka do pliku z pytaniami | ./data/questions.csv |
+| Pole                  | Opis                                           | Domyślnie                           |
+| --------------------- | ---------------------------------------------- | ----------------------------------- |
+| `teams`               | Liczba drużyn (3 lub 4)                        | 4                                   |
+| `teamNames`           | Nazwy drużyn                                   | Czerwoni, Niebiescy, Żółci, Zieloni |
+| `teamColors`          | Kolory drużyn (kody hex)                       | czerwony, niebieski, żółty, zielony |
+| `startingCredits`     | Kredyty startowe każdej drużyny                | 1000                                |
+| `startingTokens`      | Tokeny startowe każdej drużyny                 | 3                                   |
+| `tokensBetweenRounds` | Tokeny dodawane każdej drużynie między rundami | 1                                   |
+| `rounds`              | Liczba rund w grze                             | 3                                   |
+| `questionsPerRound`   | Liczba pytań w każdej rundzie                  | 5                                   |
+| `baseTax`             | Stawki myto (%) dla kolejnych rund             | 5, 10, 15                           |
+| `bidStep`             | Krok przycisków +/- w licytacji                | 100                                 |
+| `questionsFile`       | Ścieżka do pliku z pytaniami                   | ./data/questions.csv                |
 
 Pole `baseTax` to lista wartości procentowych — po jednej na rundę. Pierwsza wartość to stawka myto w pierwszej rundzie, druga w drugiej itd. Myto to procent kredytów pobierany od każdej drużyny do puli na początku każdej licytacji.
 
@@ -26,17 +26,17 @@ Pytania przechowywane są w pliku CSV (domyślnie `data/questions.csv`). Każdy 
 
 ### Kolumny
 
-| Kolumna | Opis | Dotyczy |
-|---------|------|---------|
-| Kategoria | Nazwa kategorii (np. Nauka, Sport) | wszystkie |
-| Podkategoria | Nazwa podkategorii (np. Fizyka, Biologia) | wszystkie |
-| Pytanie | Treść pytania | wszystkie |
-| Typ_pytania | `ABCD` lub `Liczba` | wszystkie |
-| Margines | Dopuszczalne odchylenie od poprawnej odpowiedzi | tylko Liczba |
-| Podpucha1 | Pierwsza błędna odpowiedź | tylko ABCD |
-| Podpucha2 | Druga błędna odpowiedź | tylko ABCD |
-| Podpucha3 | Trzecia błędna odpowiedź | tylko ABCD |
-| Akceptowana_Odpowiedź | Poprawna odpowiedź | wszystkie |
+| Kolumna               | Opis                                            | Dotyczy      |
+| --------------------- | ----------------------------------------------- | ------------ |
+| Kategoria             | Nazwa kategorii (np. Nauka, Sport)              | wszystkie    |
+| Podkategoria          | Nazwa podkategorii (np. Fizyka, Biologia)       | wszystkie    |
+| Pytanie               | Treść pytania                                   | wszystkie    |
+| Typ_pytania           | `ABCD` lub `Liczba`                             | wszystkie    |
+| Margines              | Dopuszczalne odchylenie od poprawnej odpowiedzi | tylko Liczba |
+| Podpucha1             | Pierwsza błędna odpowiedź                       | tylko ABCD   |
+| Podpucha2             | Druga błędna odpowiedź                          | tylko ABCD   |
+| Podpucha3             | Trzecia błędna odpowiedź                        | tylko ABCD   |
+| Akceptowana_Odpowiedź | Poprawna odpowiedź                              | wszystkie    |
 
 ### Organizacja pytań
 

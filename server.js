@@ -48,19 +48,25 @@ function saveState(state) {
 }
 
 function loadHistory() {
-  if (!fs.existsSync(HISTORY_PATH)) return [];
-  return JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf-8'));
+  if (!fs.existsSync(HISTORY_PATH)) return { entries: [], cursor: -1 };
+  const data = JSON.parse(fs.readFileSync(HISTORY_PATH, 'utf-8'));
+  if (Array.isArray(data)) return { entries: [], cursor: -1 };
+  return data;
 }
 
-function saveHistory(history) {
-  fs.writeFileSync(HISTORY_PATH, JSON.stringify(history, null, 2));
+function saveHistory(h) {
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify(h, null, 2));
 }
 
-function pushHistory(state) {
-  const history = loadHistory();
-  history.push(JSON.parse(JSON.stringify(state)));
-  if (history.length > 50) history.shift();
-  saveHistory(history);
+function snapshotHistory(state) {
+  const h = loadHistory();
+  h.entries = h.entries.slice(0, h.cursor + 1);
+  h.entries.push(JSON.parse(JSON.stringify(state)));
+  if (h.entries.length > 50) {
+    h.entries.shift();
+  }
+  h.cursor = h.entries.length - 1;
+  saveHistory(h);
 }
 
 // GET config
@@ -131,25 +137,43 @@ app.post('/api/init', (req, res) => {
   };
 
   saveState(state);
-  // Clear history
-  saveHistory([]);
+  // Init history with initial state
+  saveHistory({ entries: [JSON.parse(JSON.stringify(state))], cursor: 0 });
   res.json(state);
+});
+
+// GET history-info
+app.get('/api/history-info', (req, res) => {
+  const h = loadHistory();
+  res.json({
+    canUndo: h.cursor > 0,
+    canRedo: h.cursor < h.entries.length - 1,
+  });
 });
 
 // POST undo
 app.post('/api/undo', (req, res) => {
-  const history = loadHistory();
-  if (history.length === 0) return res.status(400).json({ error: 'Brak historii do cofnięcia' });
-  const prev = history.pop();
-  saveHistory(history);
-  saveState(prev);
-  res.json(prev);
+  const h = loadHistory();
+  if (h.cursor <= 0) return res.status(400).json({ error: 'Brak historii do cofnięcia' });
+  h.cursor--;
+  saveHistory(h);
+  saveState(h.entries[h.cursor]);
+  res.json(h.entries[h.cursor]);
+});
+
+// POST redo
+app.post('/api/redo', (req, res) => {
+  const h = loadHistory();
+  if (h.cursor >= h.entries.length - 1) return res.status(400).json({ error: 'Brak historii do przywrócenia' });
+  h.cursor++;
+  saveHistory(h);
+  saveState(h.entries[h.cursor]);
+  res.json(h.entries[h.cursor]);
 });
 
 // POST draw category (random)
 app.post('/api/draw', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   if (state.categoryPool.length === 0) {
     // replenish from used
@@ -164,6 +188,7 @@ app.post('/api/draw', (req, res) => {
   const cat = pool[idx];
   state.currentCategory = cat;
   saveState(state);
+  snapshotHistory(state);
 
   res.json({ category: cat, pool });
 });
@@ -171,7 +196,6 @@ app.post('/api/draw', (req, res) => {
 // POST confirm draw -> go to bid phase
 app.post('/api/confirm-draw', (req, res) => {
   const state = loadState();
-  pushHistory(state);
   const config = state.config;
 
   state.phase = 'bid';
@@ -189,13 +213,13 @@ app.post('/api/confirm-draw', (req, res) => {
   state.categoryPool = state.categoryPool.filter((c) => c !== state.currentCategory);
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST submit bids
 app.post('/api/submit-bids', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const { bids } = req.body; // { teamId: amount }
   state.bids = bids;
@@ -226,13 +250,13 @@ app.post('/api/submit-bids', (req, res) => {
 
   state.phase = 'subcategory';
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST select subcategory
 app.post('/api/select-subcategory', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const { subcategory } = req.body;
   const questions = loadQuestions();
@@ -250,13 +274,13 @@ app.post('/api/select-subcategory', (req, res) => {
   state.usedQuestionKeys.push(`${state.currentCategory}|${subcategory}`);
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST change subcategory (spend token)
 app.post('/api/change-subcategory', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
@@ -269,39 +293,39 @@ app.post('/api/change-subcategory', (req, res) => {
   state.marginUsed = false;
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST reveal ABCD
 app.post('/api/reveal-abcd', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
   state.abcdRevealed = true;
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST use margin
 app.post('/api/use-margin', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
   state.marginUsed = true;
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST correct answer
 app.post('/api/correct-answer', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const { longshot } = req.body;
   const pool = state.currentPool;
@@ -316,13 +340,13 @@ app.post('/api/correct-answer', (req, res) => {
   };
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST wrong answer (no token for active team, just move to next)
 app.post('/api/wrong-answer', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   // No token for active team — just advance to next
   state.bidOrderIndex = (state.bidOrderIndex || 0) + 1;
@@ -337,13 +361,13 @@ app.post('/api/wrong-answer', (req, res) => {
   }
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST pass question
 app.post('/api/pass-question', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   // Give current active team a token
   const team = state.teams.find((t) => t.id === state.activeTeamId);
@@ -363,13 +387,13 @@ app.post('/api/pass-question', (req, res) => {
   }
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST wrong ABCD option
 app.post('/api/wrong-abcd', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const { option } = req.body;
   if (!state.abcdWrongOptions) state.abcdWrongOptions = [];
@@ -388,13 +412,13 @@ app.post('/api/wrong-abcd', (req, res) => {
   }
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST confirm summary
 app.post('/api/confirm-summary', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const config = state.config;
 
@@ -447,6 +471,7 @@ app.post('/api/confirm-summary', (req, res) => {
       // Game over
       state.phase = 'gameover';
       saveState(state);
+      snapshotHistory(state);
       return res.json(state);
     }
 
@@ -458,13 +483,13 @@ app.post('/api/confirm-summary', (req, res) => {
 
   state.phase = 'draw';
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 
 // POST update team (manual edit)
 app.post('/api/update-team', (req, res) => {
   const state = loadState();
-  pushHistory(state);
 
   const { teamId, credits, tokens } = req.body;
   const team = state.teams.find((t) => t.id === teamId);
@@ -474,6 +499,7 @@ app.post('/api/update-team', (req, res) => {
   if (tokens !== undefined) team.tokens = tokens;
 
   saveState(state);
+  snapshotHistory(state);
   res.json(state);
 });
 

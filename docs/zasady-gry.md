@@ -41,11 +41,13 @@ Wyświetlane jest pytanie wybranej podkategorii. Pytania dzielą się na dwa typ
 Aktywna drużyna może wykonać jedną z następujących akcji:
 
 **Akcje kosztujące token (-1 token):**
+
 - **Podpowiedź ABCD** (pytania ABCD) — odsłania cztery opcje odpowiedzi wyświetlone w losowej kolejności
 - **Zwiększenie marginesu** (pytania liczbowe) — zwiększa dopuszczalny margines błędu
 - **Zmiana podkategorii** — drużyna wraca do wyboru podkategorii i wybiera inną
 
 **Odpowiedzi:**
+
 - **Poprawna odpowiedź** — drużyna zdobywa kredyty z puli (patrz: Punktacja)
 - **Błędna odpowiedź** — pytanie przechodzi do następnej drużyny w kolejności licytacji
 - **Pass** — drużyna rezygnuje z odpowiedzi, otrzymuje token, pytanie przechodzi dalej
@@ -67,12 +69,14 @@ Wyświetlany jest wynik pytania — która drużyna zdobyła ile kredytów, lub 
 ## Bilans tokenów
 
 **Zdobywanie tokenów (+1):**
+
 - Pass (podanie pytania dalszej drużynie)
 - Poprawna odpowiedź bez podpowiedzi (bonus longshot)
 - Kliknięcie błędnej opcji ABCD
 - Między rundami (wszystkie drużyny, konfigurowalnie)
 
 **Wydawanie tokenów (-1):**
+
 - Odkrycie opcji ABCD
 - Zwiększenie marginesu (pytanie liczbowe)
 - Zmiana podkategorii
