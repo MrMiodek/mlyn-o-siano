@@ -102,6 +102,21 @@ async function initGame() {
   showScreen('draw');
 }
 
+/* ===== RESET ===== */
+function resetGame() {
+  if (!confirm('Na pewno zresetować grę?')) return;
+  G = null;
+  document.getElementById('round-display').textContent = '1';
+  document.getElementById('question-display').textContent = '1';
+  document.getElementById('category-display').textContent = '—';
+  document.getElementById('sidebar-subcategory').textContent = '—';
+  document.getElementById('sidebar-pool').textContent = '🪙 0';
+  document.getElementById('teams-list').innerHTML = '';
+  document.getElementById('btn-undo').disabled = true;
+  document.getElementById('btn-redo').disabled = true;
+  showScreen('init');
+}
+
 /* ===== UNDO ===== */
 async function undo() {
   const prev = await api('POST', '/api/undo');

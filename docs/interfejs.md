@@ -6,7 +6,7 @@ Interfejs podzielony jest na cztery strefy:
 
 ### Pasek górny
 
-Wyświetla numer bieżącej rundy i pytania oraz nazwę aktualnej kategorii (po jej wylosowaniu). Po prawej stronie znajdują się przyciski **Cofnij** i **Przywróć**, pozwalające na nawigowanie w historii stanów gry. Przyciski są wyszarzone gdy operacja nie jest dostępna (np. brak historii do cofnięcia lub przywrócenia).
+Wyświetla numer bieżącej rundy i pytania oraz nazwę aktualnej kategorii (po jej wylosowaniu). Po prawej stronie znajdują się przyciski **Cofnij** i **Przywróć**, pozwalające na nawigowanie w historii stanów gry (wyszarzone gdy operacja nie jest dostępna), oraz przycisk **Reset**, który po potwierdzeniu resetuje grę do stanu początkowego.
 
 ### Lewy pasek boczny
 
