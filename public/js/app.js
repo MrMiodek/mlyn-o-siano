@@ -70,11 +70,22 @@ function renderSidebar(state) {
 
   const list = document.getElementById('teams-list');
   list.innerHTML = '';
-  for (const team of state.teams || []) {
+  const hasActiveTeam = state.activeTeamId != null;
+  list.classList.toggle('answering', hasActiveTeam);
+  let teamsOrdered = [...(state.teams || [])];
+  if (state.bidOrder && state.bidOrder.length > 0) {
+    teamsOrdered.sort((a, b) => {
+      const ia = state.bidOrder.indexOf(a.id);
+      const ib = state.bidOrder.indexOf(b.id);
+      return ia - ib;
+    });
+  }
+  for (const team of teamsOrdered) {
     const isActive = team.id === state.activeTeamId;
     const bid = state.bids && state.bids[team.id] !== undefined ? state.bids[team.id] : null;
     const card = document.createElement('div');
     card.className = 'team-card' + (isActive ? ' active' : '');
+    card.style.setProperty('--team-color', team.color + '40');
     card.style.borderLeftColor = team.color;
     card.innerHTML = `
       <div class="team-name" style="color:${team.color}">${team.name}</div>
@@ -89,6 +100,15 @@ function renderSidebar(state) {
       ${bid !== null ? `<div class="team-bid">Licytacja: <span>${bid}</span></div>` : ''}
     `;
     list.appendChild(card);
+  }
+
+  if (hasActiveTeam) {
+    for (const card of list.children) {
+      if (!card.classList.contains('active')) {
+        const h = card.offsetHeight;
+        card.style.marginBottom = `-${h * 0.2}px`;
+      }
+    }
   }
 }
 
