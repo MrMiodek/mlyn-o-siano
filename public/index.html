@@ -115,15 +115,21 @@
             <div id="question-text" class="question-text"></div>
             <div id="abcd-options" class="abcd-options hidden"></div>
             <div id="question-actions" class="question-actions">
-              <button id="btn-hint" class="btn-action btn-blue" onclick="useHint()"></button>
-              <button id="btn-change-sub" class="btn-action btn-purple" onclick="changeSub()">
-                ↩ Zmień podkategorię <span class="btn-sub">(-1 🎫)</span>
-              </button>
-              <button id="btn-pass" class="btn-action btn-orange" onclick="passQuestion()">
-                Pass <span class="btn-sub">(+1 🎫)</span>
-              </button>
-              <button id="btn-correct" class="btn-action btn-green" onclick="correctAnswer()"></button>
-              <button id="btn-wrong" class="btn-action btn-red" onclick="wrongAnswer()">✗ Błędna odpowiedź</button>
+              <div class="action-group action-group-main">
+                <button id="btn-correct" class="btn-action btn-green" onclick="correctAnswer()"></button>
+                <button id="btn-pass" class="btn-action btn-ghost btn-ghost-neutral" onclick="passQuestion()">
+                  Pass <span class="btn-sub">(+1 🎫)</span>
+                </button>
+                <button id="btn-wrong" class="btn-action btn-red" onclick="wrongAnswer()">✗ Błędna odpowiedź</button>
+              </div>
+              <div class="action-group action-group-lifelines">
+                <button id="btn-hint" class="btn-action btn-ghost btn-ghost-purple btn-with-cost" onclick="useHint()">
+                  <span class="btn-label"></span><span class="btn-cost">−1 🎫</span>
+                </button>
+                <button id="btn-change-sub" class="btn-action btn-ghost btn-ghost-orange btn-with-cost" onclick="changeSub()">
+                  <span class="btn-label">↩ Zmień podkategorię</span><span class="btn-cost">−1 🎫</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>

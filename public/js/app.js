@@ -435,7 +435,7 @@ function renderQuestionPhase(state) {
   abcdEl.innerHTML = '';
 
   if (q.Typ_pytania === 'ABCD') {
-    hintBtn.innerHTML = '🅰️ ABCD <span class="btn-sub">(−1🎫)</span>';
+    hintBtn.querySelector('.btn-label').textContent = '🅰️ ABCD';
     hintBtn.classList.remove('hidden');
     hintBtn.disabled = state.abcdRevealed;
 
@@ -465,9 +465,9 @@ function renderQuestionPhase(state) {
     }
   } else {
     // Liczba
-    hintBtn.innerHTML = state.marginUsed
-      ? 'Margines+ <span class="btn-sub">(użyty)</span>'
-      : '📏 Margines+ <span class="btn-sub">(−1🎫)</span>';
+    hintBtn.querySelector('.btn-label').textContent = state.marginUsed
+      ? 'Margines+ (użyty)'
+      : '📏 Margines+';
     hintBtn.disabled = state.marginUsed;
     hintBtn.classList.remove('hidden');
 
