@@ -148,7 +148,16 @@ function drawWheel(categories, rotation) {
   const canvas = document.getElementById('wheel-canvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
-  const size = canvas.width;
+  const dpr = window.devicePixelRatio || 1;
+  const cssSize = 420;
+  if (canvas.width !== cssSize * dpr) {
+    canvas.width = cssSize * dpr;
+    canvas.height = cssSize * dpr;
+    canvas.style.width = cssSize + 'px';
+    canvas.style.height = cssSize + 'px';
+  }
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const size = cssSize;
   const cx = size / 2;
   const cy = size / 2;
   const radius = cx - 8;
@@ -190,7 +199,9 @@ function drawWheel(categories, rotation) {
     ctx.shadowColor = 'rgba(0,0,0,0.8)';
     ctx.shadowBlur = 4;
 
-    const fontSize = n > 12 ? 12 : n > 8 ? 14 : n > 5 ? 16 : 19;
+    const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
+    const fontRem = n > 12 ? 0.9 : n > 8 ? 1.1 : n > 5 ? 1.3 : 1.5;
+    const fontSize = fontRem * rem;
     ctx.font = `bold ${fontSize}px "Barlow Condensed", sans-serif`;
 
     const maxWidth = radius - 40;

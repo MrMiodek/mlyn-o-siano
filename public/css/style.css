@@ -438,6 +438,18 @@ body {
   box-shadow: 0 8px 30px rgba(30, 132, 73, 0.5);
 }
 
+#draw-actions {
+  display: flex;
+  gap: 1rem;
+  width: 120%;
+}
+
+#draw-actions .btn-giant {
+  flex: 1;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
 /* ===== DRAW SCREEN ===== */
 #draw-container {
   text-align: center;
