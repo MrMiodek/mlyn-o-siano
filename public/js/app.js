@@ -457,10 +457,12 @@ function renderQuestionPhase(state) {
         }
         abcdEl.appendChild(btn);
       }
-      correctBtn.textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-label').textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-cost').textContent = '';
       correctBtn.onclick = () => correctAnswer(false);
     } else {
-      correctBtn.innerHTML = '✓ Poprawna odpowiedź <span class="btn-sub">(+1🎫)</span>';
+      correctBtn.querySelector('.btn-label').textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-cost').textContent = '+1 🎫';
       correctBtn.onclick = () => correctAnswer(true);
     }
   } else {
@@ -472,10 +474,12 @@ function renderQuestionPhase(state) {
     hintBtn.classList.remove('hidden');
 
     if (state.marginUsed) {
-      correctBtn.textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-label').textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-cost').textContent = '';
       correctBtn.onclick = () => correctAnswer(false);
     } else {
-      correctBtn.innerHTML = '✓ Poprawna odpowiedź <span class="btn-sub">(+1🎫)</span>';
+      correctBtn.querySelector('.btn-label').textContent = '✓ Poprawna odpowiedź';
+      correctBtn.querySelector('.btn-cost').textContent = '+1 🎫';
       correctBtn.onclick = () => correctAnswer(true);
     }
   }
