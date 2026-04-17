@@ -152,7 +152,7 @@ function drawWheel(categories, rotation) {
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
   const dpr = window.devicePixelRatio || 1;
-  const cssSize = 420;
+  const cssSize = 620;
   if (canvas.width !== cssSize * dpr) {
     canvas.width = cssSize * dpr;
     canvas.height = cssSize * dpr;
@@ -203,11 +203,11 @@ function drawWheel(categories, rotation) {
     ctx.shadowBlur = 4;
 
     const rem = parseFloat(getComputedStyle(document.documentElement).fontSize);
-    const fontRem = n > 12 ? 0.9 : n > 8 ? 1.1 : n > 5 ? 1.3 : 1.5;
+    const fontRem = n > 12 ? 1.2 : n > 8 ? 1.5 : n > 5 ? 1.8 : 2.1;
     const fontSize = fontRem * rem;
     ctx.font = `bold ${fontSize}px "Barlow Condensed", sans-serif`;
 
-    const maxWidth = radius - 40;
+    const maxWidth = radius - 20;
     let text = categories[i];
     while (ctx.measureText(text).width > maxWidth && text.length > 3) {
       text = text.slice(0, -1);
@@ -576,13 +576,12 @@ function renderSummary(state) {
   if (r.type === 'correct') {
     const team = state.teams.find((t) => t.id === r.teamId);
     el.innerHTML = `
-      <span class="highlight">${team ? team.name : '?'}</span><br>
-      zdobywa<br>
-      <span class="pool-val">${r.pool}</span>${r.longshot ? ' +1🎫' : ''}<br>
-      kredytów!
+      <span class="highlight" style="color:${team ? team.color : 'inherit'}">${team ? team.name : '?'}</span><br>
+      zdobywają<br>
+      🪙 <span class="pool-val">${r.pool}</span>${r.longshot ? ' +1🎫' : ''}!
     `;
   } else {
-    el.innerHTML = `W puli pozostaje<br><span class="pool-val">${r.pool}</span><br>kredytów`;
+    el.innerHTML = `W puli pozostaje<br>🪙 <span class="pool-val">${r.pool}</span>`;
   }
 }
 

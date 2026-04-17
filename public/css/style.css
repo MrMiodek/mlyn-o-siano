@@ -487,7 +487,7 @@ body {
 
 #wheel-pointer {
   position: absolute;
-  top: -10px;
+  top: -22px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 2.2rem;
