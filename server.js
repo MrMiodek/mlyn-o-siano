@@ -133,6 +133,7 @@ app.post('/api/init', (req, res) => {
     abcdRevealed: false,
     abcdWrongOptions: [],
     marginUsed: false,
+    effectiveMargin: null,
     config,
   };
 
@@ -268,6 +269,7 @@ app.post('/api/select-subcategory', (req, res) => {
   state.abcdRevealed = false;
   state.abcdWrongOptions = [];
   state.marginUsed = false;
+  state.effectiveMargin = null;
 
   // Mark subcategory used
   if (!state.usedQuestionKeys) state.usedQuestionKeys = [];
@@ -291,6 +293,7 @@ app.post('/api/change-subcategory', (req, res) => {
   state.abcdRevealed = false;
   state.abcdWrongOptions = [];
   state.marginUsed = false;
+  state.effectiveMargin = null;
 
   saveState(state);
   snapshotHistory(state);
@@ -317,6 +320,9 @@ app.post('/api/use-margin', (req, res) => {
   const team = state.teams.find((t) => t.id === state.activeTeamId);
   if (team && team.tokens > 0) team.tokens -= 1;
   state.marginUsed = true;
+
+  const originalMargin = Number(state.currentQuestion?.Margines ?? 0);
+  state.effectiveMargin = originalMargin === 0 ? 1 : originalMargin * 2;
 
   saveState(state);
   snapshotHistory(state);
@@ -449,6 +455,7 @@ app.post('/api/confirm-summary', (req, res) => {
   state.abcdRevealed = false;
   state.abcdWrongOptions = [];
   state.marginUsed = false;
+  state.effectiveMargin = null;
   state.activeTeamId = null;
 
   // Advance question/round

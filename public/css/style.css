@@ -173,6 +173,7 @@ body {
   letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-dim);
+  margin-top: 0.6rem;
   margin-bottom: 0.1rem;
 }
 
@@ -252,6 +253,10 @@ body {
   font-size: 0.95rem;
   color: var(--text);
   font-weight: 600;
+}
+
+#sidebar-subcategory {
+  font-size: 1.3rem;
 }
 
 .sidebar-pool {
@@ -700,13 +705,39 @@ body {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
 }
 
+.question-margin {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-muted, #aaa);
+  margin-top: -0.5rem;
+}
+
 .abcd-options {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 0.75rem;
 }
 
+.abcd-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  background: var(--accent);
+  color: #000;
+  border-radius: 50%;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  padding-bottom: 0.1rem;
+  margin-right: 0.6rem;
+  flex-shrink: 0;
+}
+
 .btn-abcd-option {
+  display: flex;
+  align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
   color: var(--text);

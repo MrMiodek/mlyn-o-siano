@@ -1,9 +1,9 @@
 {
-  "teams": 4,
+  "teams": 3,
   "teamNames": ["Czerwoni", "Niebiescy", "Żółci", "Zieloni"],
   "teamColors": ["#e53e3e", "#3182ce", "#d69e2e", "#38a169"],
-  "startingCredits": 1000,
-  "startingTokens": 3,
+  "startingCredits": 3000,
+  "startingTokens": 2,
   "tokensBetweenRounds": 1,
   "rounds": 3,
   "questionsPerRound": 5,

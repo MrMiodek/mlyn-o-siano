@@ -1,6 +1,13 @@
 /* ===== STATE ===== */
 let G = null; // game state
 let modalTeamId = null;
+let _lastActionTime = 0;
+function guardAction() {
+  const now = Date.now();
+  if (now - _lastActionTime < 500) return false;
+  _lastActionTime = now;
+  return true;
+}
 
 /* ===== WHEEL STATE ===== */
 const WHEEL_COLORS = [
@@ -421,6 +428,15 @@ function renderQuestionPhase(state) {
   const q = state.currentQuestion;
   document.getElementById('question-text').textContent = q.Pytanie;
 
+  const marginEl = document.getElementById('question-margin');
+  if (q.Typ_pytania !== 'ABCD') {
+    const margin = state.effectiveMargin !== null && state.effectiveMargin !== undefined ? state.effectiveMargin : Number(q.Margines ?? 0);
+    marginEl.textContent = `(Margines: ${margin})`;
+    marginEl.classList.remove('hidden');
+  } else {
+    marginEl.classList.add('hidden');
+  }
+
   const hintBtn = document.getElementById('btn-hint');
   const correctBtn = document.getElementById('btn-correct');
   const abcdEl = document.getElementById('abcd-options');
@@ -438,10 +454,11 @@ function renderQuestionPhase(state) {
     if (state.abcdRevealed) {
       abcdEl.classList.remove('hidden');
       const options = buildAbcdOptions(q, state.abcdWrongOptions || []);
-      for (const opt of options) {
+      const letters = ['A', 'B', 'C', 'D'];
+      for (const [i, opt] of options.entries()) {
         const btn = document.createElement('button');
         btn.className = 'btn-abcd-option' + (opt.wrong ? ' wrong' : '');
-        btn.textContent = opt.label;
+        btn.innerHTML = `<span class="abcd-letter">${letters[i]}</span>${opt.label}`;
         if (!opt.wrong) {
           if (opt.correct) {
             btn.onclick = () => correctAnswer(false);
@@ -493,6 +510,12 @@ function buildAbcdOptions(q, wrongOpts) {
 }
 
 async function useHint() {
+  if (!guardAction()) return;
+  const active = G.teams.find((t) => t.id === G.activeTeamId);
+  if (active && active.tokens <= 0) {
+    alert('Brak tokenów!');
+    return;
+  }
   const q = G.currentQuestion;
   if (q.Typ_pytania === 'ABCD') {
     G = await api('POST', '/api/reveal-abcd');
@@ -506,6 +529,7 @@ async function useHint() {
 }
 
 async function changeSub() {
+  if (!guardAction()) return;
   const active = G.teams.find((t) => t.id === G.activeTeamId);
   if (active && active.tokens <= 0) {
     alert('Brak tokenów!');
@@ -519,6 +543,7 @@ async function changeSub() {
 }
 
 async function correctAnswer(longshot = true) {
+  if (!guardAction()) return;
   G = await api('POST', '/api/correct-answer', { longshot });
   if (!G) return;
   renderSidebar(G);
@@ -527,6 +552,7 @@ async function correctAnswer(longshot = true) {
 }
 
 async function wrongAnswer() {
+  if (!guardAction()) return;
   G = await api('POST', '/api/wrong-answer');
   if (!G) return;
   renderSidebar(G);
@@ -540,6 +566,7 @@ async function wrongAnswer() {
 }
 
 async function passQuestion() {
+  if (!guardAction()) return;
   G = await api('POST', '/api/pass-question');
   if (!G) return;
   renderSidebar(G);
@@ -552,6 +579,7 @@ async function passQuestion() {
 }
 
 async function wrongAbcd(label) {
+  if (!guardAction()) return;
   G = await api('POST', '/api/wrong-abcd', { option: label });
   if (!G) return;
   renderSidebar(G);
