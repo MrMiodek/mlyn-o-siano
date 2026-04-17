@@ -52,7 +52,7 @@ Aktywna drużyna może wykonać jedną z następujących akcji:
 - **Błędna odpowiedź** — pytanie przechodzi do następnej drużyny w kolejności licytacji
 - **Pass** — drużyna rezygnuje z odpowiedzi, otrzymuje token, pytanie przechodzi dalej
 
-Przy pytaniach ABCD po odsłonięciu opcji drużyna może kliknąć jedną z odpowiedzi. Kliknięcie podpuchy oznacza błędną odpowiedź — opcja zostaje wyszarzona, drużyna dostaje token, a pytanie przechodzi do kolejnej drużyny.
+Przy pytaniach ABCD po odsłonięciu opcji drużyna może kliknąć jedną z odpowiedzi. Kliknięcie podpuchy oznacza błędną odpowiedź — opcja zostaje wyszarzona, a pytanie przechodzi do kolejnej drużyny.
 
 Jeśli żadna drużyna nie odpowie poprawnie, pula pytania przenosi się do następnego pytania.
 
@@ -72,7 +72,6 @@ Wyświetlany jest wynik pytania — która drużyna zdobyła ile kredytów, lub 
 
 - Pass (podanie pytania dalszej drużynie)
 - Poprawna odpowiedź bez podpowiedzi (bonus longshot)
-- Kliknięcie błędnej opcji ABCD
 - Między rundami (wszystkie drużyny, konfigurowalnie)
 
 **Wydawanie tokenów (-1):**

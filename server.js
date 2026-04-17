@@ -399,10 +399,6 @@ app.post('/api/wrong-abcd', (req, res) => {
   if (!state.abcdWrongOptions) state.abcdWrongOptions = [];
   state.abcdWrongOptions.push(option);
 
-  // Give token, next team
-  const team = state.teams.find((t) => t.id === state.activeTeamId);
-  if (team) team.tokens += 1;
-
   state.bidOrderIndex = (state.bidOrderIndex || 0) + 1;
   if (state.bidOrderIndex >= state.bidOrder.length) {
     state.phase = 'summary';

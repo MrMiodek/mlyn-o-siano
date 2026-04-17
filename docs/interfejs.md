@@ -73,7 +73,7 @@ Aplikacja komunikuje się między frontendem a backendem przez REST API.
 | POST   | /api/correct-answer     | Zarejestrowanie poprawnej odpowiedzi                           |
 | POST   | /api/wrong-answer       | Błędna odpowiedź, pytanie przechodzi dalej                     |
 | POST   | /api/pass-question      | Pass — token dla drużyny, pytanie przechodzi dalej             |
-| POST   | /api/wrong-abcd         | Błędna opcja ABCD — token dla drużyny, opcja wyszarzona        |
+| POST   | /api/wrong-abcd         | Błędna opcja ABCD — opcja wyszarzona, pytanie przechodzi dalej |
 | POST   | /api/confirm-summary    | Zatwierdzenie podsumowania, przejście do kolejnego pytania     |
 | POST   | /api/update-team        | Ręczna edycja kredytów lub tokenów drużyny                     |
 | GET    | /api/history-info       | Informacja o dostępności cofania i przywracania                |
