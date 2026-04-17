@@ -610,8 +610,12 @@ function renderGameOver(state) {
   sorted.forEach((team, i) => {
     const row = document.createElement('div');
     row.className = 'final-row';
+    if (i === 0) {
+      row.style.borderColor = team.color;
+      row.style.background = `${team.color}0f`;
+    }
     row.innerHTML = `
-      <div class="final-rank">${i + 1}.</div>
+      <div class="final-rank" style="${i === 0 ? `color:${team.color}` : ''}">${i + 1}.</div>
       <div class="final-team-name" style="color:${team.color}">${team.name}</div>
       <div class="final-credits">💰 ${team.credits}</div>
       <div class="final-tokens">🎫 ${team.tokens}</div>
@@ -646,6 +650,8 @@ async function saveModal() {
 
 /* ===== PHASE ROUTER (for undo) ===== */
 function applyPhase(state) {
+  const sidebar = document.getElementById('sidebar');
+  sidebar.style.display = state.phase === 'gameover' ? 'none' : '';
   switch (state.phase) {
     case 'draw':
       document.getElementById('btn-confirm-draw').classList.add('hidden');

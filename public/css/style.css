@@ -857,11 +857,6 @@ body {
   border: 2px solid var(--border);
 }
 
-.final-row:first-child {
-  border-color: var(--accent);
-  background: rgba(245, 200, 66, 0.06);
-}
-
 .final-rank {
   font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
@@ -869,14 +864,10 @@ body {
   min-width: 2.5rem;
 }
 
-.final-row:first-child .final-rank {
-  color: var(--accent);
-}
-
 .final-team-name {
   font-family: 'Barlow Condensed', sans-serif;
   font-weight: 700;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
   text-transform: uppercase;
   flex: 1;
   text-align: left;
