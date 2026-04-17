@@ -76,8 +76,12 @@ function renderSidebar(state) {
     const card = document.createElement('div');
     card.className = 'team-card' + (isActive ? ' active' : '');
     card.style.borderLeftColor = team.color;
+    card.style.setProperty('--team-color', team.color);
     card.innerHTML = `
-      <div class="team-name" style="color:${team.color}">${team.name}</div>
+      <div class="team-header">
+        <div class="team-name" style="color:${team.color}">${team.name}</div>
+        ${bid !== null ? `<div class="team-bid-inline">(🪙 <span>${bid}</span>)</div>` : ''}
+      </div>
       <div class="team-stats">
         <div class="stat-chip" onclick="openModal(${team.id})" title="Kliknij by edytować">
           💰 <span class="stat-v">${team.credits}</span>
@@ -86,7 +90,6 @@ function renderSidebar(state) {
           🎫 <span class="stat-v">${team.tokens}</span>
         </div>
       </div>
-      ${bid !== null ? `<div class="team-bid">Licytacja: <span>${bid}</span></div>` : ''}
     `;
     list.appendChild(card);
   }
