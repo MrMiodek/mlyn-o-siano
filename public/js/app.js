@@ -9,6 +9,43 @@ function guardAction() {
   return true;
 }
 
+/* ===== WHEEL AUDIO ===== */
+let _audioCtx = null;
+function getAudioCtx() {
+  if (!_audioCtx) _audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return _audioCtx;
+}
+
+function playWheelTick(radPerSec) {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'triangle';
+  osc.frequency.value = 900;
+  const vol = Math.min(0.35, 0.08 + radPerSec * 0.008);
+  gain.gain.setValueAtTime(vol, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.035);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.035);
+}
+
+function playWheelStop() {
+  const ctx = getAudioCtx();
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(280, ctx.currentTime);
+  osc.frequency.exponentialRampToValueAtTime(70, ctx.currentTime + 0.18);
+  gain.gain.setValueAtTime(0.45, ctx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.22);
+  osc.start(ctx.currentTime);
+  osc.stop(ctx.currentTime + 0.22);
+}
+
 /* ===== WHEEL STATE ===== */
 const WHEEL_COLORS = [
   '#c0392b',
@@ -273,6 +310,8 @@ function spinToCategory(targetCategory, pool) {
 
   if (wheelAnimId) cancelAnimationFrame(wheelAnimId);
 
+  let lastTickCount = Math.floor(wheelAngle / sliceAngle);
+
   function animate(now) {
     const elapsed = now - startTime;
     const t = Math.min(elapsed / duration, 1);
@@ -282,12 +321,20 @@ function spinToCategory(targetCategory, pool) {
     wheelAngle = startAngle + totalDelta * eased;
     drawWheel(pool, wheelAngle);
 
+    const currentTickCount = Math.floor(wheelAngle / sliceAngle);
+    if (currentTickCount !== lastTickCount) {
+      const radPerSec = (3 * Math.pow(1 - t, 2) * totalDelta) / (duration / 1000);
+      playWheelTick(radPerSec);
+      lastTickCount = currentTickCount;
+    }
+
     if (t < 1) {
       wheelAnimId = requestAnimationFrame(animate);
     } else {
       wheelAngle = finalAngle;
       drawWheel(pool, wheelAngle);
       wheelAnimId = null;
+      playWheelStop();
       onWheelStopped(targetCategory);
     }
   }
