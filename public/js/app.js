@@ -431,7 +431,7 @@ function renderBidPhase(state) {
       <div class="bid-team-name" style="color:${team.color}">${team.name}</div>
       <button class="btn-bid-step" onclick="stepBid(${team.id}, -${state.config.bidStep}, ${team.credits})">−${state.config.bidStep}</button>
       <input class="bid-input" id="bid-input-${team.id}" type="number" min="0" max="${team.credits}"
-        placeholder="0" oninput="onBidInput(${team.id})" />
+        value="0" oninput="onBidInput(${team.id})" />
       <button class="btn-bid-step" onclick="stepBid(${team.id}, ${state.config.bidStep}, ${team.credits})">+${state.config.bidStep}</button>
       <button class="btn-vabank" onclick="vaBankTeam(${team.id}, ${team.credits})">Va Bank</button>
       <div class="bid-credits">💰 ${team.credits}</div>
@@ -461,11 +461,11 @@ function onBidInput(teamId) {
 
 function checkBidsReady() {
   const btn = document.getElementById('btn-confirm-bids');
-  const allFilled = G.teams.every((t) => {
+  const anyNonZero = G.teams.some((t) => {
     const inp = document.getElementById('bid-input-' + t.id);
-    return inp && inp.value !== '';
+    return inp && parseInt(inp.value) > 0;
   });
-  btn.disabled = !allFilled;
+  btn.disabled = !anyNonZero;
 }
 
 async function confirmBids() {
