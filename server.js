@@ -115,7 +115,7 @@ app.post('/api/init', (req, res) => {
 
   const state = {
     initialized: true,
-    phase: 'draw', // draw, bid, subcategory, question, summary, gameover
+    phase: 'draw', // draw, tax, bid, subcategory, question, summary, gameover
     round: 1,
     questionInRound: 1,
     totalQuestions: 0,
@@ -134,6 +134,7 @@ app.post('/api/init', (req, res) => {
     abcdWrongOptions: [],
     marginUsed: false,
     effectiveMargin: null,
+    taxInfo: null, // { ratePercent, perTeam: [{teamId, amount}], total }
     config,
   };
 
@@ -194,24 +195,44 @@ app.post('/api/draw', (req, res) => {
   res.json({ category: cat, pool });
 });
 
-// POST confirm draw -> go to bid phase
+// POST confirm draw -> compute tax preview and go to tax info screen
 app.post('/api/confirm-draw', (req, res) => {
   const state = loadState();
   const config = state.config;
 
-  state.phase = 'bid';
+  state.phase = 'tax';
   state.bids = {};
-  const taxRate = config.baseTax[state.round - 1] / 100;
-  let taxCollected = 0;
+  const ratePercent = config.baseTax[state.round - 1];
+  const taxRate = ratePercent / 100;
+  const perTeam = [];
+  let total = 0;
   state.teams.forEach((team) => {
     const tax = Math.floor(team.credits * taxRate);
-    team.credits -= tax;
-    taxCollected += tax;
+    total += tax;
+    perTeam.push({ teamId: team.id, amount: tax });
   });
-  state.currentPool = (state.currentPool || 0) + taxCollected;
+  state.taxInfo = { ratePercent, perTeam, total };
 
   // Remove from category pool
   state.categoryPool = state.categoryPool.filter((c) => c !== state.currentCategory);
+
+  saveState(state);
+  snapshotHistory(state);
+  res.json(state);
+});
+
+// POST confirm tax -> apply tax and go to bid phase
+app.post('/api/confirm-tax', (req, res) => {
+  const state = loadState();
+
+  if (state.taxInfo) {
+    for (const entry of state.taxInfo.perTeam) {
+      const team = state.teams.find((t) => t.id === entry.teamId);
+      if (team) team.credits -= entry.amount;
+    }
+    state.currentPool = (state.currentPool || 0) + state.taxInfo.total;
+  }
+  state.phase = 'bid';
 
   saveState(state);
   snapshotHistory(state);

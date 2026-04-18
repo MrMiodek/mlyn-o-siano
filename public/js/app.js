@@ -375,6 +375,36 @@ async function confirmDraw() {
   G = await api('POST', '/api/confirm-draw');
   if (!G) return;
   renderSidebar(G);
+  renderTaxPhase(G);
+  showScreen('tax');
+}
+
+/* ===== TAX PHASE ===== */
+function renderTaxPhase(state) {
+  const info = state.taxInfo || { ratePercent: 0, perTeam: [], total: 0 };
+  document.getElementById('tax-rate-value').textContent = `${info.ratePercent}%`;
+  document.getElementById('tax-total-value').textContent = `🪙 +${info.total}`;
+
+  const rows = document.getElementById('tax-rows');
+  rows.innerHTML = '';
+  for (const entry of info.perTeam) {
+    const team = state.teams.find((t) => t.id === entry.teamId);
+    if (!team) continue;
+    const row = document.createElement('div');
+    row.className = 'tax-row';
+    row.style.borderLeftColor = team.color;
+    row.innerHTML = `
+      <div class="tax-team-name" style="color:${team.color}">${team.name}</div>
+      <div class="tax-amount">−🪙 ${entry.amount}</div>
+    `;
+    rows.appendChild(row);
+  }
+}
+
+async function confirmTax() {
+  G = await api('POST', '/api/confirm-tax');
+  if (!G) return;
+  renderSidebar(G);
   renderBidPhase(G);
   showScreen('bid');
 }
@@ -477,7 +507,10 @@ function renderQuestionPhase(state) {
 
   const marginEl = document.getElementById('question-margin');
   if (q.Typ_pytania !== 'ABCD') {
-    const margin = state.effectiveMargin !== null && state.effectiveMargin !== undefined ? state.effectiveMargin : Number(q.Margines ?? 0);
+    const margin =
+      state.effectiveMargin !== null && state.effectiveMargin !== undefined
+        ? state.effectiveMargin
+        : Number(q.Margines ?? 0);
     marginEl.textContent = `(Margines: ${margin})`;
     marginEl.classList.remove('hidden');
   } else {
@@ -733,6 +766,10 @@ function applyPhase(state) {
       document.getElementById('wheel-result').classList.add('hidden');
       initWheelDisplay();
       showScreen('draw');
+      break;
+    case 'tax':
+      renderTaxPhase(state);
+      showScreen('tax');
       break;
     case 'bid':
       renderBidPhase(state);
