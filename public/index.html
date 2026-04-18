@@ -84,9 +84,26 @@
             <div id="draw-actions">
               <button id="btn-draw" class="btn-giant" onclick="drawCategory()">🎡 Zakręć</button>
               <button id="btn-confirm-draw" class="btn-giant btn-green hidden" onclick="confirmDraw()">
-                Licytacja →
+                Dalej →
               </button>
             </div>
+          </div>
+        </div>
+
+        <!-- TAX SCREEN -->
+        <div id="screen-tax" class="screen">
+          <div class="tax-container">
+            <h2 class="tax-title">💸 Myto</h2>
+            <div class="tax-rate-box">
+              <div class="tax-rate-label">Stawka w tej rundzie</div>
+              <div id="tax-rate-value" class="tax-rate-value">—</div>
+            </div>
+            <div id="tax-rows" class="tax-rows"></div>
+            <div class="tax-total-box">
+              <div class="tax-total-label">Do puli trafia</div>
+              <div id="tax-total-value" class="tax-total-value">🪙 0</div>
+            </div>
+            <button class="btn-giant btn-green" onclick="confirmTax()">Licytacja →</button>
           </div>
         </div>
 

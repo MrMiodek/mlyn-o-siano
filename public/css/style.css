@@ -267,6 +267,12 @@ body {
 }
 
 /* ===== TEAM CARDS ===== */
+#teams-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
 .team-card {
   border-radius: 10px;
   padding: 0.7rem 0.8rem;
@@ -357,7 +363,6 @@ body {
   font-family: 'Barlow Condensed', sans-serif;
   font-size: 1.15rem;
 }
-
 
 /* ===== MAIN CONTENT ===== */
 #main-content {
@@ -521,6 +526,107 @@ body {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ===== TAX SCREEN ===== */
+.tax-container {
+  width: 100%;
+  max-width: 32rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  padding: 2rem;
+}
+
+.tax-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.5rem;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-align: center;
+}
+
+.tax-rate-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tax-rate-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.tax-rate-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem;
+  color: var(--accent);
+  line-height: 1;
+}
+
+.tax-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.tax-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
+  border-radius: 8px;
+  padding: 0.7rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tax-team-name {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-weight: 700;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.tax-amount {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.6rem;
+  color: var(--red);
+  letter-spacing: 0.05em;
+}
+
+.tax-total-box {
+  background: rgba(46, 204, 113, 0.08);
+  border: 1px solid rgba(46, 204, 113, 0.35);
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.tax-total-label {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 0.95rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.tax-total-value {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.6rem;
+  color: var(--green);
+  line-height: 1;
 }
 
 /* ===== BID SCREEN ===== */
