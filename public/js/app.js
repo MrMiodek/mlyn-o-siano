@@ -114,7 +114,16 @@ function renderSidebar(state) {
 
   const list = document.getElementById('teams-list');
   list.innerHTML = '';
-  for (const team of state.teams || []) {
+  const sortByBid = (state.phase === 'question' || state.phase === 'subcategory' || state.phase === 'summary') && state.bids;
+  const sortedTeams = [...(state.teams || [])].sort((a, b) => {
+    if (sortByBid) {
+      const bidA = state.bids[a.id] ?? -Infinity;
+      const bidB = state.bids[b.id] ?? -Infinity;
+      return bidB - bidA;
+    }
+    return b.credits - a.credits;
+  });
+  for (const team of sortedTeams) {
     const isActive = team.id === state.activeTeamId;
     const bid = state.bids && state.bids[team.id] !== undefined ? state.bids[team.id] : null;
     const card = document.createElement('div');
@@ -470,10 +479,25 @@ async function updateChangeSubBtn() {
   document.getElementById('btn-change-sub').disabled = !subs || subs.length === 0;
 }
 
+/* ===== MEDIA HELPERS ===== */
+function openMediaPopup(url) {
+  const w = 640, h = 400;
+  const left = Math.round(screen.width / 2 - w / 2);
+  const top = Math.round(screen.height / 2 - h / 2);
+  window.open(url, 'media_popup', `width=${w},height=${h},left=${left},top=${top},resizable=yes`);
+}
+
+function renderLinkedText(text) {
+  return text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, (_, label, url) => {
+    const safe = url.replace(/"/g, '%22');
+    return `<a href="${safe}" target="_blank" onclick="event.preventDefault();openMediaPopup('${safe}')" class="media-link">${label}</a>`;
+  });
+}
+
 /* ===== QUESTION PHASE ===== */
 function renderQuestionPhase(state) {
   const q = state.currentQuestion;
-  document.getElementById('question-text').textContent = q.Pytanie;
+  document.getElementById('question-text').innerHTML = renderLinkedText(q.Pytanie);
 
   const marginEl = document.getElementById('question-margin');
   if (q.Typ_pytania !== 'ABCD') {
@@ -648,15 +672,20 @@ function renderSummary(state) {
     return;
   }
 
+  const mediaUrl = state.currentQuestion?.Media;
+  const mediaLink = mediaUrl
+    ? `<br><br><a href="${mediaUrl}" target="_blank" onclick="event.preventDefault();openMediaPopup('${mediaUrl}')" class="media-link">▶ Odtwórz materiał</a>`
+    : '';
+
   if (r.type === 'correct') {
     const team = state.teams.find((t) => t.id === r.teamId);
     el.innerHTML = `
       <span class="highlight" style="color:${team ? team.color : 'inherit'}">${team ? team.name : '?'}</span><br>
       zdobywają<br>
-      🪙 <span class="pool-val">${r.pool}</span>${r.longshot ? ' +1🎫' : ''}!
+      🪙 <span class="pool-val">${r.pool}</span>${r.longshot ? ' +1🎫' : ''}!${mediaLink}
     `;
   } else {
-    el.innerHTML = `W puli pozostaje<br>🪙 <span class="pool-val">${r.pool}</span>`;
+    el.innerHTML = `W puli pozostaje<br>🪙 <span class="pool-val">${r.pool}</span>${mediaLink}`;
   }
 }
 

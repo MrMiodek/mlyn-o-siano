@@ -11,6 +11,7 @@ const ROOT = __dirname;
 const PUBLIC = path.join(ROOT, 'public');
 
 app.use(express.static(PUBLIC));
+app.use('/media', express.static(path.join(ROOT, 'data', 'media')));
 
 // Explicit fallback so / always serves index.html
 app.get('/', (req, res) => {
@@ -34,6 +35,7 @@ function loadQuestions() {
     skip_empty_lines: true,
     trim: true,
     relax_quotes: true,
+    relax_column_count: true,
   });
   return records;
 }
