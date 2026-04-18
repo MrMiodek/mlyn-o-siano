@@ -1,4 +1,4 @@
-Kategoria,Podkategoria,Pytanie,Typ_pytania,Margines,Podpucha1,Podpucha2,Podpucha3,Akceptowana_Odpowiedź
+Kategoria,Podkategoria,Pytanie,Typ_pytania,Margines,Podpucha1,Podpucha2,Podpucha3,Akceptowana_Odpowiedź,Media
 Nauka,Fizyka,Ile wynosi prędkość światła w próżni w km/s (zaokrąglij do tysięcy)?,Liczba,5000,,,,300000
 Nauka,Biologia,Który organ produkuje insulinę?,ABCD,,Wątroba,Nerka,Serce,Trzustka
 Nauka,Chemia,Jaki jest symbol chemiczny złota?,ABCD,,Ag,Gd,Go,Au
