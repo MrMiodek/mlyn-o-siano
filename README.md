@@ -33,12 +33,30 @@ Edytuj plik `config.json`:
 Edytuj plik `data/questions.csv`. Format kolumn:
 
 ```
-Kategoria, Podkategoria, Pytanie, Typ_pytania, Margines, Podpucha1, Podpucha2, Podpucha3, Akceptowana_Odpowiedź
+Kategoria, Podkategoria, Pytanie, Typ_pytania, Margines, Podpucha1, Podpucha2, Podpucha3, Akceptowana_Odpowiedź, Media
 ```
 
 - `Typ_pytania`: `ABCD` lub `Liczba`
 - `Margines`: tylko dla pytań liczbowych (ile odchylenia jest akceptowane)
 - `Podpucha1-3`: tylko dla pytań ABCD (błędne odpowiedzi)
+- `Media`: opcjonalny URL do pliku multimedialnego wyświetlanego po odpowiedzi
+- Treść pytania może zawierać osadzone linki w formacie Markdown: `[etykieta](media/plik.mp4)` — wyświetlane jako klikalne linki otwierające wyskakujące okno. Jeśli treść pytania zawiera przecinki, całe pole należy ująć w cudzysłów (jak w trzecim przykładzie poniżej)
+
+### Media lokalne
+
+Umieść pliki w katalogu `data/media/` — serwer udostępnia je pod ścieżką `/media/nazwa_pliku`. W kolumnie wystarczy podać samą ścieżkę bez wiodącego ukośnika:
+
+```
+media/klip.mp4
+```
+
+### Przykładowe wiersze
+
+```
+Nauka,Fizyka,Ile wynosi prędkość światła w próżni?,Liczba,5000,,,,299792,media/svetlo.mp4
+Sport,Piłka nożna,Kto strzelił gola w finale MŚ 2022?,ABCD,,Messi,Mbappé,Griezmann,Mbappé,
+Muzyka,Klasyka,"Posłuchaj ([fragment](media/utwor.mp3)) i podaj nazwisko kompozytora.",ABCD,,Mozart,Chopin,Beethoven,Bach,
+```
 
 ## Przebieg gry
 

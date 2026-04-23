@@ -34,7 +34,13 @@ No build step — the frontend is vanilla HTML/CSS/JS served as static files.
 
 **Undo/redo**: Each state-mutating action appends a full JSON snapshot to `game_history.json` before applying the change. Undo/redo pop from this stack.
 
-**Questions**: Loaded from a tab-separated CSV (`data/questions.csv`). Two question types: `ABCD` (multiple choice with `Podpucha1-3` as distractors) and numeric (with `Margines` tolerance). The active question file path is set in `config.json`.
+**Questions**: Loaded from a comma-separated CSV (`data/questions.csv`). Columns: `Kategoria, Podkategoria, Pytanie, Typ_pytania, Margines, Podpucha1, Podpucha2, Podpucha3, Akceptowana_Odpowiedź, Media`. Two question types: `ABCD` (multiple choice with `Podpucha1-3` as distractors) and numeric (with `Margines` tolerance). The optional `Media` column accepts a URL shown after the answer. Question text can also embed inline links using Markdown syntax (`[label](media/file.mp4)`) — rendered as clickable links opening a popup — local files go in `data/media/` and are served at `/media/filename.ext` — use the path without leading slash in the CSV (e.g. `media/clip.mp4`). The active question file path is set in `config.json`.
+
+Example rows:
+```
+Nauka,Fizyka,Ile wynosi prędkość światła w próżni?,Liczba,5000,,,,299792,media/svetlo.mp4
+Sport,Piłka nożna,Kto strzelił gola w finale MŚ 2022?,ABCD,,Messi,Mbappé,Griezmann,Mbappé,
+```
 
 **Bidding**: Teams bid credits; "Va Bank" bets all credits. The current round's base tax and pool values come from `config.json` arrays indexed by round number.
 
