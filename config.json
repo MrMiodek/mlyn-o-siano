@@ -9,6 +9,6 @@
   "questionsPerRound": 5,
   "baseTax": [5, 10, 15],
   "bidStep": 100,
-  "questionsFile": "./data/questions2.csv",
+  "questionsFile": "./data/questions2026.csv",
   "manualRoundPools": false
 }

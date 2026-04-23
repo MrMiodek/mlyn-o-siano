@@ -94,6 +94,13 @@ app.get('/api/state', (req, res) => {
   res.json(state);
 });
 
+// POST reset game (clear server state)
+app.post('/api/reset', (req, res) => {
+  saveState({ initialized: false });
+  fs.writeFileSync(HISTORY_PATH, JSON.stringify([]));
+  res.json({ ok: true });
+});
+
 // POST init game
 app.post('/api/init', (req, res) => {
   const config = loadConfig();

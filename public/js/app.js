@@ -150,17 +150,19 @@ function renderSidebar(state) {
 
 /* ===== INIT ===== */
 async function initGame() {
+  await api('POST', '/api/reset');
   G = await api('POST', '/api/init');
   if (!G) return;
+  document.getElementById('sidebar').style.display = '';
   renderSidebar(G);
-  wheelAngle = 0;
   initWheelDisplay();
   showScreen('draw');
 }
 
 /* ===== RESET ===== */
-function resetGame() {
+async function resetGame() {
   if (!confirm('Na pewno zresetować grę?')) return;
+  await api('POST', '/api/reset');
   G = null;
   document.getElementById('round-display').textContent = '1';
   document.getElementById('question-display').textContent = '1';
@@ -170,6 +172,7 @@ function resetGame() {
   document.getElementById('teams-list').innerHTML = '';
   document.getElementById('btn-undo').disabled = true;
   document.getElementById('btn-redo').disabled = true;
+  document.getElementById('sidebar').style.display = '';
   showScreen('init');
 }
 
@@ -288,8 +291,11 @@ function drawWheel(categories, rotation) {
 }
 
 function initWheelDisplay() {
+  wheelAngle = 0;
   wheelCategories = getWheelCategories();
   drawWheel(wheelCategories, wheelAngle);
+  document.getElementById('btn-confirm-draw').classList.add('hidden');
+  document.getElementById('wheel-result').classList.add('hidden');
 }
 
 function spinToCategory(targetCategory, pool) {
@@ -730,9 +736,6 @@ async function confirmSummary() {
     renderGameOver(G);
     showScreen('gameover');
   } else {
-    // Reset draw screen
-    document.getElementById('btn-confirm-draw').classList.add('hidden');
-    document.getElementById('wheel-result').classList.add('hidden');
     initWheelDisplay();
     showScreen('draw');
   }
@@ -791,8 +794,6 @@ function applyPhase(state) {
   sidebar.style.display = state.phase === 'gameover' ? 'none' : '';
   switch (state.phase) {
     case 'draw':
-      document.getElementById('btn-confirm-draw').classList.add('hidden');
-      document.getElementById('wheel-result').classList.add('hidden');
       initWheelDisplay();
       showScreen('draw');
       break;
