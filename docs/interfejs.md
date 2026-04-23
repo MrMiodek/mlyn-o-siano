@@ -22,10 +22,11 @@ Główna przestrzeń gry, w której wyświetlane są kolejne ekrany zależnie od
 
 - **Ekran startowy** — logo i przycisk rozpoczęcia gry
 - **Losowanie** — animowane koło z kategoriami i przycisk zatwierdzenia
-- **Licytacja** — pola do wprowadzania stawek dla każdej drużyny, przyciski +/- i Va Bank, przycisk zatwierdzenia (aktywny dopiero gdy wszystkie drużyny mają wpisaną kwotę)
+- **Myto** — podgląd kwot pobieranych od każdej drużyny (stawka %, kwota na drużynę, suma do puli) i przycisk zatwierdzenia pobierającego myto
+- **Licytacja** — pola do wprowadzania stawek dla każdej drużyny, przyciski +/- i Va Bank, przycisk zatwierdzenia (aktywny gdy przynajmniej jedna drużyna wpisała kwotę > 0)
 - **Podkategoria** — trzy przyciski z dostępnymi podkategoriami
-- **Pytanie** — treść pytania oraz przyciski akcji rozmieszczone w dwóch rzędach: górny rząd to akcje gracza (podpowiedź, zmiana podkategorii, pass), dolny to odpowiedzi (poprawna, błędna)
-- **Podsumowanie** — wynik pytania i przycisk zatwierdzenia
+- **Pytanie** — treść pytania (może zawierać klikalne linki do materiałów multimedialnych) oraz przyciski akcji rozmieszczone w dwóch rzędach: górny rząd to akcje gracza (podpowiedź, zmiana podkategorii, pass), dolny to odpowiedzi (poprawna, błędna)
+- **Podsumowanie** — wynik pytania, opcjonalny link do materiału multimedialnego i przycisk zatwierdzenia
 - **Koniec gry** — tabela rankingowa z wynikami wszystkich drużyn
 
 ### Prawy pasek boczny
@@ -64,7 +65,8 @@ Aplikacja komunikuje się między frontendem a backendem przez REST API.
 | ------ | ----------------------- | -------------------------------------------------------------- |
 | POST   | /api/init               | Inicjalizacja nowej gry                                        |
 | POST   | /api/draw               | Losowanie kategorii                                            |
-| POST   | /api/confirm-draw       | Zatwierdzenie losowania, pobranie myto, przejście do licytacji |
+| POST   | /api/confirm-draw       | Zatwierdzenie losowania, obliczenie podglądu myto              |
+| POST   | /api/confirm-tax        | Pobranie myto i przejście do licytacji                         |
 | POST   | /api/submit-bids        | Zatwierdzenie licytacji, wyłonienie aktywnej drużyny           |
 | POST   | /api/select-subcategory | Wybór podkategorii i załadowanie pytania                       |
 | POST   | /api/change-subcategory | Zmiana podkategorii (koszt: 1 token)                           |

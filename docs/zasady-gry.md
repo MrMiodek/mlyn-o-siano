@@ -19,19 +19,21 @@ Prowadzący losuje kategorię z dostępnej puli. Na ekranie wyświetla się anim
 
 Pula kategorii zmniejsza się w trakcie rundy — wylosowane kategorie nie powtarzają się. Jeśli pula się wyczerpie, wraca do niej zestaw wcześniej użytych kategorii.
 
-### 2. Myto i licytacja
+### 2. Myto
 
-Przed rozpoczęciem licytacji od każdej drużyny pobierane jest **myto** — procent aktualnych kredytów trafiający do wspólnej puli pytania. Stawka myto rośnie z każdą rundą (domyślnie 5%, 10%, 15%). Myto doliczane jest do puli, która może zawierać środki z poprzednich pytań (jeśli żadna drużyna nie odpowiedziała poprawnie).
+Po zatwierdzeniu losowania wyświetlany jest ekran myto — podgląd kwot pobieranych od każdej drużyny przed licytacją. Myto to procent aktualnych kredytów trafiający do wspólnej puli pytania. Stawka myto rośnie z każdą rundą (domyślnie 5%, 10%, 15%). Myto doliczane jest do puli, która może zawierać środki z poprzednich pytań (jeśli żadna drużyna nie odpowiedziała poprawnie). Po zatwierdzeniu ekranu myto kredyty zostają pobrane.
 
-Następnie drużyny licytują — każda deklaruje, ile kredytów stawia na to pytanie. Dostępna jest opcja „Va Bank", która automatycznie stawia wszystkie posiadane kredyty. Po zatwierdzeniu licytacji kredyty zostają odjęte od kont drużyn i dodane do puli. Drużyna, która postawiła najwięcej, staje się **aktywną drużyną** i jako pierwsza odpowiada na pytanie.
+### 3. Licytacja
+
+Drużyny licytują — każda deklaruje, ile kredytów stawia na to pytanie. Dostępna jest opcja „Va Bank", która automatycznie stawia wszystkie posiadane kredyty. Przycisk zatwierdzenia licytacji staje się aktywny, gdy przynajmniej jedna drużyna postawi więcej niż 0 kredytów. Po zatwierdzeniu licytacji kredyty zostają odjęte od kont drużyn i dodane do puli. Drużyna, która postawiła najwięcej, staje się **aktywną drużyną** i jako pierwsza odpowiada na pytanie.
 
 W przypadku remisu w licytacji o pierwszeństwo decyduje: mniejsza liczba kredytów, potem mniejsza liczba tokenów, a na końcu kolejność w interfejsie.
 
-### 3. Wybór podkategorii
+### 4. Wybór podkategorii
 
 Aktywna drużyna wybiera jedną z trzech dostępnych podkategorii w ramach wylosowanej kategorii. Każda podkategoria odpowiada jednemu pytaniu. Użyte podkategorie nie pojawiają się ponownie.
 
-### 4. Pytanie
+### 5. Pytanie
 
 Wyświetlane jest pytanie wybranej podkategorii. Pytania dzielą się na dwa typy:
 
@@ -56,7 +58,7 @@ Przy pytaniach ABCD po odsłonięciu opcji drużyna może kliknąć jedną z odp
 
 Jeśli żadna drużyna nie odpowie poprawnie, pula pytania przenosi się do następnego pytania.
 
-### 5. Podsumowanie
+### 6. Podsumowanie
 
 Wyświetlany jest wynik pytania — która drużyna zdobyła ile kredytów, lub informacja o przeniesieniu puli. Po zatwierdzeniu gra przechodzi do losowania kolejnej kategorii (lub do następnej rundy / końca gry).
 

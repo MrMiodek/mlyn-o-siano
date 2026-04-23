@@ -2,13 +2,13 @@
   "teams": 3,
   "teamNames": ["Czerwoni", "Niebiescy", "Żółci", "Zieloni"],
   "teamColors": ["#e53e3e", "#3182ce", "#d69e2e", "#38a169"],
-  "startingCredits": 3000,
+  "startingCredits": 5000,
   "startingTokens": 2,
   "tokensBetweenRounds": 1,
   "rounds": 3,
   "questionsPerRound": 5,
   "baseTax": [5, 10, 15],
   "bidStep": 100,
-  "questionsFile": "./data/questions.csv",
+  "questionsFile": "./data/questions2.csv",
   "manualRoundPools": false
 }

@@ -37,6 +37,11 @@ Pytania przechowywane są w pliku CSV (domyślnie `data/questions.csv`). Każdy 
 | Podpucha2             | Druga błędna odpowiedź                          | tylko ABCD   |
 | Podpucha3             | Trzecia błędna odpowiedź                        | tylko ABCD   |
 | Akceptowana_Odpowiedź | Poprawna odpowiedź                              | wszystkie    |
+| Media                 | URL do materiału multimedialnego (opcjonalny)   | wszystkie    |
+
+Kolumna `Media` jest opcjonalna. Jeśli zawiera URL, link pojawi się na ekranie podsumowania po odpowiedzi. Treść pytania (`Pytanie`) może też zawierać osadzone linki w formacie Markdown (`[etykieta](url)`) — zostaną wyświetlone jako klikalne linki otwierające wyskakujące okno.
+
+Serwer udostępnia pliki z katalogu `data/media/` pod ścieżką `/media/` — można tam umieszczać lokalne pliki graficzne lub dźwiękowe i odnosić się do nich jako `http://localhost:8080/media/plik.mp4`.
 
 ### Organizacja pytań
 
